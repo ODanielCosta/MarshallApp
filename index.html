@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MARSHALL 0.1</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        body{
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            height: 100%;
+        }
+        .bg{
+            height: 100vh;
+            position: fixed;
+            opacity: 35%;
+        }
+        main{
+            z-index: 99;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin-top: -80px;
+        }
+        .logo{
+            width: 170px;
+        }
+        .hole{
+            margin: 10px;
+        }
+        .results{
+            margin: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .time-difference {
+            font-weight: bold;
+        }
+        .time-difference.green {
+            color: green;
+        }
+        .time-difference.red {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <img src="course.jpg" alt="bg" class="bg">
+    <main>
+            <img src="ROYAL_OBIDOS_Logo.png" alt="logo" class="logo">
+
+        <div class="tee-time">
+            <label for="tee-time">Tee Time:</label>
+            <select id="tee-time" name="tee-time">
+                <!-- Tee Time options will be added here -->
+            </select>
+        </div>
+
+        <div class="hole">
+            <label for="hole">Buraco:</label>
+            <select id="hole" name="hole">
+                <!-- Hole options will be added here -->
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+            </select>
+        </div>
+
+        <div class="buttons">
+            <button id="calculate-end-time">Calcular Tempo de Termino</button>
+            <button id="clear-result">Limpar</button>
+        </div>
+
+        <div class="results">
+            <div id="result"></div>
+            <div id="time-difference" class="time-difference"></div>
+        </div>
+    </main>
+    
+
+    <script>
+        const teeTimeSelect = document.getElementById('tee-time');
+        const holeSelect = document.getElementById('hole');
+        const resultDiv = document.getElementById('result');
+        const timeDifferenceDiv = document.getElementById('time-difference');
+        const calculateButton = document.getElementById('calculate-end-time');
+        const clearButton = document.getElementById('clear-result');
+
+        const startHour = 8;
+        const endHour = 14;
+        const incrementMinutes = 10;
+
+        const holeTimes = [
+            16, 19, 13, 15, 19, 12, 17, 13, 15, 16, 19, 16, 12, 16, 13, 15, 15, 19
+        ];
+
+        for (let hour = startHour; hour <= endHour; hour++) {
+            for (let minutes = 0; minutes < 60; minutes += incrementMinutes) {
+                if (hour === endHour && minutes > 0) break;
+                const time = `${hour.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+                const option = document.createElement('option');
+                option.value = time;
+                option.textContent = time;
+                teeTimeSelect.appendChild(option);
+            }
+        }
+
+        function calculateEndTime() {
+            const teeTime = teeTimeSelect.value;
+            const hole = parseInt(holeSelect.value);
+
+            const [hour, minute] = teeTime.split(':').map(Number);
+            const teeTimeDate = new Date();
+            teeTimeDate.setHours(hour, minute, 0, 0);
+
+            let totalMinutes = 0;
+            for (let i = 0; i < hole; i++) {
+                totalMinutes += holeTimes[i];
+            }
+
+            const endTimeDate = new Date(teeTimeDate.getTime() + totalMinutes * 60000);
+            const endTime = endTimeDate.toTimeString().slice(0, 5);
+
+            resultDiv.textContent = `Termina buraco ${hole} ás: ${endTime}`;
+
+            const currentTime = new Date();
+            const timeDifference = currentTime - endTimeDate;
+
+            const absTimeDifference = Math.abs(timeDifference);
+            const hoursDifference = Math.floor(absTimeDifference / (1000 * 60 * 60));
+            const minutesDifference = Math.floor((absTimeDifference % (1000 * 60 * 60)) / (1000 * 60));
+
+            if (currentTime > endTimeDate) {
+                timeDifferenceDiv.innerHTML = `Atrasado: <span style="color: red; font-weight: bold;">${hoursDifference}h${minutesDifference}m</span>`;
+                timeDifferenceDiv.classList.remove('green');
+                timeDifferenceDiv.classList.add('red');
+            } else {
+                timeDifferenceDiv.innerHTML = `A horas: <span style="color: green; font-weight: bold;">${hoursDifference}h${minutesDifference}m</span>`;
+                timeDifferenceDiv.classList.remove('red');
+                timeDifferenceDiv.classList.add('green');
+            }
+        }
+
+        function clearResult() {
+            resultDiv.textContent = '';
+            timeDifferenceDiv.textContent = '';
+            timeDifferenceDiv.classList.remove('red', 'green');
+        }
+
+        calculateButton.addEventListener('click', calculateEndTime);
+        clearButton.addEventListener('click', clearResult);
+    </script>
+</body>
+</html>
