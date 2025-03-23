@@ -211,8 +211,11 @@
 
             holeTimesTable.style.display = 'table';
 
-            const currentTime = new Date();
+            // Calculate the end time for the selected hole
+            totalMinutes = holeTimes.slice(0, hole).reduce((acc, time) => acc + time, 0);
             const endTimeDate = new Date(teeTimeDate.getTime() + totalMinutes * 60000);
+
+            const currentTime = new Date();
             const timeDifference = currentTime - endTimeDate;
 
             const absTimeDifference = Math.abs(timeDifference);
@@ -220,11 +223,11 @@
             const minutesDifference = Math.floor((absTimeDifference % (1000 * 60 * 60)) / (1000 * 60));
 
             if (currentTime > endTimeDate) {
-                timeDifferenceDiv.innerHTML = `Atrasado: <span style="color: red; font-weight: bold;">${hoursDifference}h${minutesDifference}m</span>`;
+                timeDifferenceDiv.innerHTML = `Atrasado: + <span style="color: red; font-weight: bold;">${hoursDifference}h${minutesDifference}m</span>`;
                 timeDifferenceDiv.classList.remove('green');
                 timeDifferenceDiv.classList.add('red');
             } else {
-                timeDifferenceDiv.innerHTML = `A horas: <span style="color: green; font-weight: bold;">${hoursDifference}h${minutesDifference}m</span>`;
+                timeDifferenceDiv.innerHTML = `A horas: - <span style="color: green; font-weight: bold;">${hoursDifference}h${minutesDifference}m</span>`;
                 timeDifferenceDiv.classList.remove('red');
                 timeDifferenceDiv.classList.add('green');
             }
