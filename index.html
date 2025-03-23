@@ -6,6 +6,7 @@
     <title>MARSHALL 0.1</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon.png" type="image/png">
 
     <style>
         body{
@@ -15,8 +16,15 @@
             flex-direction: column;
             align-items: center;
             font-family: 'Poppins', sans-serif;
-            font-size: 14px;
+            font-size: 16px;
             height: 100%;
+        }
+        select, button{
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+        }
+        button{
+            padding:5px;
         }
         .bg{
             height: 100vh;
@@ -33,7 +41,7 @@
             margin-top: -80px;
         }
         .logo{
-            width: 170px;
+            width: 190px;
         }
         .hole{
             margin: 10px;
@@ -53,12 +61,25 @@
         .time-difference.red {
             color: red;
         }
+        table {
+            margin-top: 10px;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: center;
+            width: 100px; /* Ensure consistent width */
+        }
     </style>
 </head>
 <body>
     <img src="course.jpg" alt="bg" class="bg">
     <main>
-            <img src="ROYAL_OBIDOS_Logo.png" alt="logo" class="logo">
+        <img src="ROYAL_OBIDOS_Logo.png" alt="logo" class="logo">
 
         <div class="tee-time">
             <label for="tee-time">Tee Time:</label>
@@ -100,10 +121,20 @@
         <div class="results">
             <div id="result"></div>
             <div id="time-difference" class="time-difference"></div>
+            <table id="hole-times-table" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Buraco</th>
+                        <th>Termino</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be added dynamically -->
+                </tbody>
+            </table>
         </div>
     </main>
     
-
     <script>
         const teeTimeSelect = document.getElementById('tee-time');
         const holeSelect = document.getElementById('hole');
@@ -140,16 +171,44 @@
             teeTimeDate.setHours(hour, minute, 0, 0);
 
             let totalMinutes = 0;
-            for (let i = 0; i < hole; i++) {
-                totalMinutes += holeTimes[i];
-            }
+            const holeTimesTable = document.getElementById('hole-times-table');
+            const tbody = holeTimesTable.querySelector('tbody');
+            tbody.innerHTML = ''; // Clear previous results
 
-            const endTimeDate = new Date(teeTimeDate.getTime() + totalMinutes * 60000);
-            const endTime = endTimeDate.toTimeString().slice(0, 5);
+            const holesToShow = [hole - 1, hole, hole + 1].filter(h => h > 0 && h <= holeTimes.length);
 
-            resultDiv.textContent = `Termina buraco ${hole} ás: ${endTime}`;
+            holesToShow.forEach(h => {
+                totalMinutes = holeTimes.slice(0, h).reduce((acc, time) => acc + time, 0);
+                const endTimeDate = new Date(teeTimeDate.getTime() + totalMinutes * 60000);
+                const endTime = endTimeDate.toTimeString().slice(0, 5);
+
+                const row = document.createElement('tr');
+                const holeCell = document.createElement('td');
+                const timeCell = document.createElement('td');
+
+                holeCell.textContent = h;
+                timeCell.textContent = endTime;
+
+                if (h === hole) {
+                    const currentTime = new Date();
+                    const timeDifference = currentTime - endTimeDate;
+
+                    if (currentTime > endTimeDate) {
+                        timeCell.style.color = 'red';
+                    } else {
+                        timeCell.style.color = 'green';
+                    }
+                }
+
+                row.appendChild(holeCell);
+                row.appendChild(timeCell);
+                tbody.appendChild(row);
+            });
+
+            holeTimesTable.style.display = 'table';
 
             const currentTime = new Date();
+            const endTimeDate = new Date(teeTimeDate.getTime() + totalMinutes * 60000);
             const timeDifference = currentTime - endTimeDate;
 
             const absTimeDifference = Math.abs(timeDifference);
@@ -171,6 +230,9 @@
             resultDiv.textContent = '';
             timeDifferenceDiv.textContent = '';
             timeDifferenceDiv.classList.remove('red', 'green');
+            const holeTimesTable = document.getElementById('hole-times-table');
+            holeTimesTable.style.display = 'none';
+            holeTimesTable.querySelector('tbody').innerHTML = '';
         }
 
         calculateButton.addEventListener('click', calculateEndTime);
