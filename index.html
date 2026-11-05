@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,24 +34,470 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin-top: -80px;
+            justify-content: flex-start;
+            box-sizing: border-box;
+            width: 100%;
+            min-height: 100vh;
+            min-height: 100svh;
+            padding: 24px 12px;
         }
         .logo{
             width: 190px;
         }
-        .hole{
-            margin: 10px;
+        .app-header {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            width: 100%;
+            max-width: 350px;
+            margin-bottom: 12px;
+            z-index: 2;
+        }
+        .app-header .logo { display: block; width: 120px; height: auto; }
+        .active-mode {
+            padding: 6px 10px;
+            border: 1px solid #517c3840;
+            border-radius: 20px;
+            background: #ffffffcc;
+            color: #345326;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .menu-toggle {
+            display: grid;
+            place-items: center;
+            flex: 0 0 44px;
+            height: 44px;
+            padding: 0;
+            border: 1px solid #517c38;
+            border-radius: 14px;
+            background: #fffffff0;
+            color: #345326;
+            box-shadow: 0 3px 10px #20351414;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+        .menu-toggle svg { width: 22px; height: 22px; }
+        .mode-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            box-sizing: border-box;
+            width: min(290px, 100%);
+            padding: 8px;
+            border: 1px solid #517c384d;
+            border-radius: 18px;
+            background: #fffffffA;
+            box-shadow: 0 12px 32px #20351433;
+        }
+        .mode-menu p {
+            margin: 8px 10px;
+            color: #526448;
+            font-size: 12px;
+        }
+        .mode-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            padding: 12px 10px;
+            border: 0;
+            border-radius: 12px;
+            background: transparent;
+            color: #345326;
+            text-align: left;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+        .mode-option[aria-pressed="true"] { background: #e7efdf; }
+        .mode-option strong, .mode-option small { display: block; }
+        .mode-option strong { font-size: 14px; font-weight: 600; }
+        .mode-option small { margin-top: 3px; color: #526448; font-size: 11px; }
+        .mode-check { width: 18px; opacity: 0; font-weight: 600; }
+        .mode-option[aria-pressed="true"] .mode-check { opacity: 1; }
+        .menu-toggle:focus-visible, .mode-option:focus-visible {
+            outline: 3px solid #345326;
+            outline-offset: 3px;
+        }
+        .menu-toggle[aria-expanded="true"], .mode-option:hover { background: #e7efdf; }
+        .menu-toggle, .mode-option { -webkit-tap-highlight-color: transparent; }
+        .selectors {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin: 16px 12px 4px;
+            max-width: 420px;
+        }
+        .parameter {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            margin: 0;
+        }
+        .parameter label {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .parameter[hidden] { display: none; }
+        .selectors:not(.is-shotgun) {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            width: 100%;
+            max-width: none;
+            margin-left: 0;
+            margin-right: 0;
+        }
+        .selectors:not(.is-shotgun) .parameter { width: 100%; }
+        .selectors:not(.is-shotgun) .swipe-selector { width: 100%; box-sizing: border-box; }
+        .selectors:not(.is-shotgun) .swipe-step { flex: 0 0 44px; }
+        .selectors:not(.is-shotgun) .swipe-value { flex: 1; min-width: 0; padding: 0; }
+        .selectors.is-shotgun {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            width: 100%;
+            max-width: 350px;
+            margin-left: 0;
+            margin-right: 0;
+        }
+        .is-shotgun .hole { grid-column: 1 / -1; width: 100%; }
+        .is-shotgun .swipe-selector { width: 100%; box-sizing: border-box; }
+        .is-shotgun .swipe-step { flex: 0 0 44px; }
+        .is-shotgun .swipe-value { flex: 1; min-width: 0; padding: 0; }
+        .shotgun-time input {
+            box-sizing: border-box;
+            width: 100%;
+            min-width: 0;
+            height: 60px;
+            padding: 0 10px;
+            border: 1px solid #517c38;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.94);
+            box-shadow: 0 3px 10px #20351414;
+            color: #203514;
+            font: 600 20px 'Poppins', sans-serif;
+            text-align: center;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        .shotgun-time input::-webkit-date-and-time-value { text-align: center; }
+        .shotgun-time input:focus-visible { outline: 3px solid #345326; outline-offset: 3px; }
+        .swipe-selector {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.94);
+            border: 1px solid #517c38;
+            border-radius: 14px;
+            box-shadow: 0 3px 10px #20351414;
+            overflow: hidden;
+        }
+        .swipe-step {
+            width: 44px;
+            height: 58px;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            color: #345326;
+            font-size: 28px;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+        .swipe-step:disabled {
+            color: #b5beb1;
+            cursor: default;
+        }
+        .swipe-step:active:not(:disabled) {
+            background: #e3eddc;
+        }
+        .swipe-value {
+            display: grid;
+            place-items: center;
+            min-width: 68px;
+            min-height: 58px;
+            padding: 0 3px;
+            font-size: 22px;
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+            color: #203514;
+            cursor: ew-resize;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: pan-y pinch-zoom;
+        }
+        .swipe-value:focus-visible, .swipe-step:focus-visible {
+            outline: 3px solid #345326;
+            outline-offset: -4px;
+            border-radius: 8px;
+        }
+        .swipe-number {
+            transition: transform 140ms ease-out;
+        }
+        .swipe-value.is-dragging {
+            background: #edf3e7;
+            cursor: grabbing;
+        }
+        .is-dragging .swipe-number {
+            transition: none;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .swipe-number { transition: none; }
+        }
+        .swipe-hint {
+            margin: 4px 12px 16px;
+            font-size: 12px;
+            color: #28391f;
+            text-align: center;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            width: 100%;
+            max-width: 350px;
+            gap: 10px;
+        }
+        main .buttons { margin-top: 4px; }
+        .buttons button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 48px;
+            padding: 12px 18px;
+            border: 1px solid #517c38;
+            border-radius: 14px;
+            font-weight: 600;
+            line-height: 1.2;
+            cursor: pointer;
+            touch-action: manipulation;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        .buttons svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+        #calculate-end-time {
+            background: #345326;
+            border-color: #345326;
+            color: #fff;
+            box-shadow: 0 3px 10px #20351426;
+        }
+        #clear-result {
+            background: rgba(255, 255, 255, 0.94);
+            color: #345326;
+            box-shadow: 0 3px 10px #20351414;
+        }
+        .buttons button:focus-visible {
+            outline: 3px solid #345326;
+            outline-offset: 3px;
+        }
+        .buttons button:active {
+            transform: translateY(1px);
+            box-shadow: none;
+        }
+        @media (hover: hover) {
+            #calculate-end-time:hover { background: #29451e; }
+            #clear-result:hover { background: #edf3e7; }
+        }
+        @media (prefers-reduced-motion: no-preference) {
+            .buttons button { transition: background-color 140ms ease, box-shadow 140ms ease, transform 140ms ease; }
         }
         .results{
             margin: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 100%;
+            max-width: 350px;
         }
+        .result-view-toggle {
+            display: flex;
+            box-sizing: border-box;
+            width: 100%;
+            gap: 4px;
+            margin-top: 8px;
+            padding: 3px;
+            border: 1px solid #517c384d;
+            border-radius: 14px;
+            background: #ffffffe8;
+        }
+        .result-view-toggle button {
+            flex: 1;
+            min-height: 44px;
+            border: 0;
+            border-radius: 10px;
+            background: transparent;
+            color: #345326;
+            font-weight: 600;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+        .result-view-toggle button[aria-pressed="true"] { background: #345326; color: white; }
+        .result-view-toggle button:focus-visible { outline: 3px solid #345326; outline-offset: 2px; }
+        .hole-progress {
+            position: relative;
+            isolation: isolate;
+            box-sizing: border-box;
+            width: 100%;
+            margin-top: 8px;
+            padding: 12px;
+            border: 1px solid #517c38;
+            border-radius: 14px;
+            background: #fffffff0;
+            box-shadow: 0 3px 10px #20351414;
+            color: #203514;
+            cursor: zoom-in;
+        }
+        main.showing-progress .hole-progress { padding-top: 8px; margin-top: 12px; }
+        .ideal-progress { position: relative; margin-top: 18px; padding-top: 8px; border-top: 1px solid #dce6d6; }
+        .ideal-progress .progress-caption { position: static; display: table; width: fit-content; max-width: 100%; margin: 0 0 6px; white-space: normal; }
+        .progress-expand {
+            position: absolute;
+            top: -16px;
+            right: -10px;
+            z-index: 10;
+            display: grid;
+            place-items: center;
+            width: 44px;
+            height: 44px;
+            padding: 0;
+            border: 0;
+            border-radius: 10px;
+            background: transparent;
+            color: #345326;
+            cursor: zoom-in;
+        }
+        .progress-expand::before { content: ''; position: absolute; inset: 8px; border: 1px solid #517c38; border-radius: 10px; background: #f8fcf5; box-shadow: 0 2px 6px #20351426; }
+        .progress-expand svg { position: relative; z-index: 1; width: 16px; height: 16px; }
+        .progress-expand:focus-visible { outline: 3px solid #345326; outline-offset: 3px; }
+        .result-view-toggle[hidden], .hole-progress[hidden] { display: none; }
+        .progress-caption {
+            position: absolute;
+            top: -10px;
+            left: 12px;
+            box-sizing: border-box;
+            max-width: calc(100% - 50px);
+            margin: 0;
+            padding: 3px 8px;
+            border: 1px solid #b6cba7;
+            border-radius: 8px;
+            background: #e5efde;
+            color: #263c1c;
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 1.3;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .progress-summary { display: flex; justify-content: space-between; align-items: center; gap: 8px; line-height: 1.2; }
+        .progress-summary strong { font-size: 20px; }
+        .progress-summary > span { font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; }
+        .expected-hole-number { display: inline-block; padding: 1px 6px; border-radius: 7px; background: #25451c; color: white; font: inherit; line-height: 1; font-variant-numeric: tabular-nums; }
+        .expected-hole-number[hidden] { display: none; }
+        .progress-track { height: 10px; margin: 10px 0 8px; border-radius: 10px; background: #e0e9da; overflow: hidden; }
+        .progress-fill { width: 0; height: 100%; border-radius: inherit; background: #517c38; }
+        .progress-route { display: flex; align-items: center; gap: 8px; }
+        .progress-route .progress-track { flex: 1; }
+        .golf-icon { width: 20px; height: 24px; flex: 0 0 20px; color: #345326; }
+        .progress-interval { display: flex; justify-content: space-between; gap: 8px; font-size: 11px; line-height: 1.3; color: #526448; }
+        .pace-gap {
+            --pace-background: #dcefd5;
+            --pace-border: #96b985;
+            --pace-ink: #25451c;
+            position: relative;
+            isolation: isolate;
+            margin-top: 0;
+            padding-top: 0;
+            border-top: 0;
+        }
+        .pace-gap[data-timing="late"] {
+            --pace-background: #f9dddd;
+            --pace-border: #d79999;
+            --pace-ink: #842c2c;
+        }
+        .pace-gap::before {
+            content: '';
+            position: absolute;
+            inset: -4px -8px -4px;
+            z-index: -1;
+            border: 1px solid var(--pace-border);
+            border-radius: 10px;
+            background: var(--pace-background);
+            pointer-events: none;
+        }
+        .gap-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 11px; line-height: 1.3; }
+        .gap-heading strong { font-size: 13px; }
+        .gap-status { display: inline-flex; align-items: center; justify-content: flex-end; gap: 4px; padding-right: 14px; }
+        .gap-heading .gap-status strong { font-size: 12px; }
+        .pace-status { padding: 2px 5px; border-radius: 6px; background: #842c2c; color: white; font-size: 11px; font-weight: 600; line-height: 1.2; text-transform: uppercase; }
+        .pace-status[hidden] { display: none; }
+        .current-hole { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; }
+        .current-hole-title {
+            padding: 3px 8px;
+            border: 1px solid var(--pace-border);
+            border-radius: 8px;
+            background: var(--pace-background);
+            color: var(--pace-ink);
+            font-size: 12px;
+            line-height: 1.3;
+            white-space: nowrap;
+        }
+        .current-hole strong {
+            padding: 1px 6px;
+            border-radius: 7px;
+            background: var(--pace-ink);
+            color: white;
+            font-size: 20px;
+            font-variant-numeric: tabular-nums;
+            line-height: 1;
+        }
+        .gap-track {
+            position: relative;
+            height: 8px;
+            margin: 8px 5px;
+            border-radius: 8px;
+            background-color: #e9ddcc;
+            background-image: repeating-linear-gradient(110deg, transparent 0 6px, #ffffff55 6px 10px, transparent 10px 16px);
+            background-size: 16px 100%;
+        }
+        .gap-fill {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            border-radius: inherit;
+            background-color: #a26720;
+            background-image: repeating-linear-gradient(110deg, transparent 0 6px, #ffffff66 6px 10px, transparent 10px 16px);
+            background-size: 16px 100%;
+        }
+        @keyframes gap-flow { from { background-position: 0 0; } to { background-position: 16px 0; } }
+        @media (prefers-reduced-motion: no-preference) {
+            .hole-progress:not([hidden]) .gap-fill { animation: gap-flow 1s linear infinite; }
+            .hole-progress:not([hidden]) .pace-gap:is([data-state="ahead"], [data-state="behind"]) .gap-track { animation: gap-flow 2.5s linear infinite; }
+            .pace-gap[data-state="ahead"] .gap-fill { animation-direction: reverse; }
+            .hole-progress:not([hidden]) .pace-gap[data-state="ahead"] .gap-track { animation-direction: reverse; }
+        }
+        .gap-marker { position: absolute; top: 50%; width: 20px; height: 24px; transform: translate(-50%, -50%); }
+        .gap-marker svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 0 1px white); }
+        .gap-marker.player { color: #263c1c; z-index: 2; }
+        .gap-marker.expected { color: #1e5ba8; z-index: 1; }
+        .gap-legend { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; font-size: 10px; line-height: 1.3; color: #526448; }
+        .gap-scale { font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .gap-legend span { display: inline-flex; align-items: center; gap: 4px; }
+        .gap-legend svg { width: 12px; height: 12px; flex: 0 0 12px; color: #263c1c; }
+        .gap-legend span:last-child svg { color: #1e5ba8; }
+        .icon-definitions { position: absolute; width: 0; height: 0; overflow: hidden; }
+        .pace-gap #gap-time, .pace-gap .gap-legend { color: var(--pace-ink); }
+        main.showing-progress .swipe-hint { display: none; }
         .time-difference {
             font-weight: bold;
+            line-height: 1.4;
         }
         .time-difference.green {
             color: green;
@@ -78,22 +524,320 @@
         td{
             background: rgba(255, 255, 255, 0.671);
         }
+        @media (max-width: 600px) {
+            main {
+                justify-content: flex-start;
+                padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
+            }
+            .logo { width: 150px; }
+            .showing-progress .app-header .logo { width: 70px; }
+            .showing-progress .app-header { margin-bottom: 6px; }
+            .selectors {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                width: 100%;
+                max-width: 350px;
+                gap: 10px;
+                margin: 8px 0 4px;
+            }
+            .swipe-selector { width: 100%; box-sizing: border-box; }
+            .swipe-step { flex: 0 0 44px; height: 52px; }
+            .swipe-value { flex: 1; min-width: 0; min-height: 52px; padding: 0; font-size: 20px; }
+            .shotgun-time input { height: 54px; }
+            .swipe-hint { margin-bottom: 8px; }
+            .results { margin: 6px 0; }
+            table { margin-top: 8px; }
+            th, td { padding: 5px 8px; font-size: 14px; }
+        }
+        @media (max-width: 600px) and (max-height: 600px) {
+            main { padding-top: max(8px, env(safe-area-inset-top)); padding-bottom: 8px; }
+            .app-header .logo { width: 70px; }
+            .app-header { margin-bottom: 4px; }
+            .selectors { margin-top: 4px; margin-bottom: 4px; gap: 4px; }
+            .swipe-hint { display: none; }
+            .results { margin: 4px 0; }
+            th, td { font-size: 13px; line-height: 1.35; }
+            th, td { padding-top: 3px; padding-bottom: 3px; }
+            .swipe-step { height: 44px; }
+            .swipe-value { min-height: 44px; }
+            .shotgun-time input { height: 46px; }
+            .parameter { gap: 4px; }
+            .buttons button { min-height: 44px; padding: 10px 16px; }
+            .result-view-toggle, table { margin-top: 4px; }
+            .hole-progress { padding: 10px; margin-top: 4px; }
+            .progress-track { margin: 8px 0 6px; }
+            .showing-progress .parameter label { font-size: 12px; line-height: 1.2; }
+            .showing-progress .parameter { gap: 2px; }
+            .showing-progress .app-header .logo { width: 60px; }
+            .showing-progress .app-header { margin-bottom: 4px; }
+            .showing-progress .hole-progress { padding: 8px 10px; }
+            .pace-gap { margin-top: 0; padding-top: 0; }
+            .ideal-progress { margin-top: 16px; padding-top: 6px; }
+            .gap-track { margin-top: 6px; margin-bottom: 6px; height: 6px; }
+        }
+        @media (min-width: 601px) and (max-height: 500px) {
+            main {
+                display: grid;
+                grid-template-columns: 150px minmax(0, 350px);
+                justify-content: center;
+                align-content: start;
+                gap: 4px 20px;
+                padding: 8px 12px;
+                padding-bottom: 6px;
+            }
+            .app-header { grid-column: 1; grid-row: 1 / 5; align-self: start; flex-wrap: wrap; justify-content: center; }
+            .app-header .logo { width: 140px; }
+            .mode-menu { position: fixed; top: 110px; right: 12px; width: 290px; }
+            .selectors, .swipe-hint, .buttons, .results { grid-column: 2; margin: 0; }
+            .selectors { grid-row: 1; }
+            .swipe-hint { grid-row: 2; }
+            .buttons { grid-row: 3; }
+            .results { grid-row: 4; }
+            table { margin-top: 6px; }
+            th, td { padding: 4px 8px; font-size: 14px; }
+            .swipe-hint { display: none; }
+            .swipe-step { height: 44px; }
+            .swipe-value { min-height: 44px; }
+            .parameter { gap: 4px; }
+            th, td { padding-top: 2px; padding-bottom: 2px; }
+            th, td { font-size: 13px; line-height: 1.3; }
+            .shotgun-time input { height: 46px; }
+            .selectors { gap: 4px; }
+            .result-view-toggle, table { margin-top: 4px; }
+            .result-view-toggle { padding: 0; }
+            .hole-progress { padding: 8px 10px; margin-top: 4px; }
+            .progress-caption { margin-bottom: 2px; font-size: 10px; }
+            .progress-summary strong { font-size: 18px; }
+            .progress-summary > span { font-size: 16px; }
+            .progress-track { height: 8px; margin: 6px 0; }
+            main.showing-progress { grid-template-columns: minmax(200px, 260px) minmax(0, 480px); }
+            .showing-progress .app-header { grid-column: 1; grid-row: 1; flex-wrap: nowrap; justify-content: space-between; margin: 0; }
+            .showing-progress .app-header .logo { width: 60px; }
+            .showing-progress .selectors { grid-column: 1; grid-row: 2; }
+            .showing-progress .buttons { grid-column: 1; grid-row: 3; }
+            .showing-progress .results { grid-column: 2; grid-row: 1 / 4; align-self: start; }
+            .showing-progress .results, .showing-progress .buttons { max-width: none; }
+            .showing-progress .hole-progress { display: block; max-width: none; }
+            .showing-progress .hole-progress[hidden] { display: none; }
+            .showing-progress .pace-gap { margin: 0; padding: 0; border: 0; }
+            .showing-progress .gap-heading { flex-direction: row; gap: 8px; }
+            .showing-progress .gap-legend { font-size: 9px; }
+            .showing-progress .golf-icon { height: 20px; }
+            main.showing-progress .hole-progress { padding-top: 8px; margin-top: 10px; }
+            .showing-progress .parameter { gap: 2px; }
+            .showing-progress .parameter label { line-height: 1.2; }
+            .showing-progress .buttons button { min-height: 44px; padding: 10px 16px; }
+            .showing-progress .current-hole strong { font-size: 18px; }
+            .showing-progress .current-hole-title { font-size: 10px; }
+            .showing-progress .pace-gap::before { inset: -4px -6px -4px; }
+        }
+        @media (max-width: 600px) and (max-height: 500px) {
+            main.showing-progress { padding-top: max(2px, env(safe-area-inset-top)); padding-bottom: 2px; }
+            .showing-progress .app-header { margin-bottom: 2px; }
+            .showing-progress .app-header .logo { width: 50px; }
+            .showing-progress .results { margin: 0; }
+            .showing-progress .time-difference { font-size: 14px; line-height: 1.2; }
+            .showing-progress .progress-caption { display: block; top: -8px; padding: 2px 6px; font-size: 10.5px; line-height: 1.2; }
+            main.showing-progress .hole-progress { padding-top: 6px; padding-bottom: 4px; }
+            .showing-progress .golf-icon { width: 16px; height: 18px; flex-basis: 16px; }
+            .showing-progress .progress-track { margin: 4px 0; height: 6px; }
+            .showing-progress .progress-interval { font-size: 10px; }
+            .showing-progress .pace-gap { margin-top: 0; padding-top: 0; }
+            .showing-progress .ideal-progress { margin-top: 12px; padding-top: 4px; }
+            .showing-progress .ideal-progress .progress-caption { margin-bottom: 4px; }
+            .showing-progress .result-view-toggle { margin-top: 2px; padding: 0; }
+            .showing-progress .gap-heading strong { font-size: 12px; }
+            .showing-progress .current-hole strong { font-size: 18px; padding-top: 0; padding-bottom: 0; }
+            .showing-progress .current-hole-title { padding: 2px 6px; font-size: 10.5px; line-height: 1.2; }
+            .showing-progress .progress-summary { padding-right: 20px; }
+            .showing-progress .gap-status { flex-wrap: nowrap; gap: 3px; }
+            .showing-progress .pace-status { padding: 2px 4px; font-size: 10px; }
+            .showing-progress .gap-status #gap-time { font-size: 11px; }
+        }
+        html.progress-dialog-open, html.progress-dialog-open body { overflow: hidden; }
+        .progress-dialog {
+            box-sizing: border-box;
+            width: min(940px, calc(100vw - 24px));
+            max-width: none;
+            max-height: calc(100vh - 24px);
+            max-height: calc(100dvh - 24px);
+            margin: auto;
+            padding: 18px;
+            border: 1px solid #517c3866;
+            border-radius: 22px;
+            background: #f5f9f1;
+            color: #203514;
+            overflow: auto;
+        }
+        .progress-dialog::backdrop { background: #13220ed1; backdrop-filter: blur(5px); }
+        .progress-dialog-header, .dialog-actions, .dialog-meta { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .progress-dialog-header { position: sticky; top: 0; z-index: 2; background: #f5f9f1; }
+        .progress-dialog-header h2 { margin: 2px 0 0; font-size: 20px; line-height: 1.2; }
+        .dialog-mode { color: #526448; font-size: 11px; }
+        .dialog-actions { flex-shrink: 0; gap: 6px; }
+        .dialog-actions button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            min-height: 44px;
+            padding: 8px 12px;
+            border: 1px solid #517c38;
+            border-radius: 12px;
+            background: white;
+            color: #345326;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+        .dialog-actions #progress-dialog-close { width: 44px; padding: 0; }
+        .dialog-actions svg { width: 20px; height: 20px; }
+        .dialog-actions button:focus-visible { outline: 3px solid #345326; outline-offset: 3px; }
+        .dialog-meta { flex-wrap: wrap; margin: 10px 0; }
+        .dialog-meta p { margin: 0; font-size: 12px; color: #526448; }
+        .progress-dialog .hole-progress { max-width: none; margin: 0; padding: 20px; cursor: default; box-shadow: none; }
+        .progress-dialog .progress-expand { display: none; }
+        .progress-dialog .progress-caption { position: static; display: table; max-width: none; padding: 5px 10px; font-size: 14px; margin-bottom: 8px; white-space: normal; overflow: visible; }
+        .progress-dialog .progress-summary { padding-right: 0; }
+        .progress-dialog .progress-summary strong { font-size: clamp(28px, 6vw, 44px); }
+        .progress-dialog .progress-summary > span { font-size: clamp(24px, 5vw, 40px); }
+        .progress-dialog .progress-route { gap: 14px; }
+        .progress-dialog .golf-icon { width: 32px; height: 38px; flex-basis: 32px; }
+        .progress-dialog .progress-track { height: 18px; margin: 14px 0; }
+        .progress-dialog .progress-interval { font-size: 13px; }
+        .progress-dialog .pace-gap { margin-top: 0; padding-top: 0; }
+        .progress-dialog .ideal-progress { margin-top: 16px; padding-top: 12px; }
+        .progress-dialog .gap-status { padding-right: 0; }
+        .progress-dialog .pace-status { padding: 3px 8px; font-size: 13px; }
+        .progress-dialog .gap-heading { font-size: 13px; }
+        .progress-dialog .gap-heading strong { font-size: 18px; }
+        .progress-dialog .gap-heading { flex-wrap: wrap; }
+        .progress-dialog .current-hole { font-size: 14px; }
+        .progress-dialog .current-hole-title { padding: 5px 10px; font-size: 14px; }
+        .progress-dialog .current-hole strong { font-size: 28px; padding: 2px 8px; }
+        .progress-dialog .gap-track { height: 12px; margin: 14px 6px; }
+        .progress-dialog .gap-marker { width: 28px; height: 32px; }
+        .progress-dialog .gap-marker.player { width: 32px; height: 38px; }
+        .progress-dialog .gap-legend { font-size: 12px; }
+        .progress-dialog .gap-legend svg { width: 16px; height: 16px; flex-basis: 16px; }
+        @media (max-width: 380px) {
+            .progress-dialog { padding: 12px; }
+            .landscape-button span { display: none; }
+            .dialog-actions .landscape-button { width: 44px; padding: 0; }
+        }
+        @media (orientation: landscape) and (max-height: 500px) {
+            .progress-dialog { padding: 12px; }
+            .progress-dialog .dialog-meta { margin: 6px 0; }
+            .progress-dialog .hole-progress { padding: 12px 16px; }
+            .progress-dialog .progress-caption { font-size: 12px; margin-bottom: 4px; }
+            .progress-dialog .progress-summary strong { font-size: 32px; }
+            .progress-dialog .progress-summary > span { font-size: 28px; }
+            .progress-dialog .golf-icon { width: 28px; height: 30px; flex-basis: 28px; }
+            .progress-dialog .progress-track { height: 14px; margin: 9px 0; }
+            .progress-dialog .pace-gap { margin-top: 0; padding-top: 0; }
+            .progress-dialog .ideal-progress { margin-top: 12px; padding-top: 8px; }
+            .progress-dialog .gap-heading strong { font-size: 16px; }
+            .progress-dialog .current-hole strong { font-size: 24px; }
+            .progress-dialog .current-hole-title { font-size: 12px; }
+            .progress-dialog .gap-track { height: 10px; margin: 12px 6px; }
+            .progress-dialog .gap-marker.player { width: 28px; height: 34px; }
+        }
+        /* Unified bar: equal outer columns keep the mode at the true centre. */
+        main .app-header { display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); align-items:center; box-sizing:border-box; gap:8px; padding:8px 10px; border:1px solid #ced9c8; border-radius:16px; background:#fffffff5; box-shadow:0 4px 16px #20351418; }
+        main .app-header .logo { width:76px; max-width:100%; justify-self:start; }
+        .app-header .active-mode { justify-self:center; padding:6px 0; border:0; border-radius:0; background:transparent; color:#25451c; font-size:14px; text-align:center; }
+        .app-header .menu-toggle { width:44px; justify-self:end; }
+        /* Interior spacing is included in the panel layout. */
+        #pace-gap.pace-gap { padding:14px 12px; }
+        #pace-gap.pace-gap::before { inset:0; }
+        #pace-gap .gap-heading { flex-wrap:wrap; align-items:center; gap:10px; }
+        #pace-gap .gap-status { flex-wrap:wrap; margin-left:auto; padding-right:0; gap:6px; }
+        #pace-gap[data-timing="late"] .gap-status { flex-direction:column; align-items:flex-end; }
+        #pace-gap[data-timing="late"] #gap-time { font-size:22px; font-weight:600; line-height:1.25; color:#842020; font-variant-numeric:tabular-nums; }
+        .progress-dialog #pace-gap[data-timing="late"] #gap-time { font-size:28px; }
+        @media (min-width:601px) and (max-height:500px) {
+            main .app-header, main.showing-progress .app-header { grid-column:1 / -1; grid-row:1; max-width:none; margin-bottom:6px; }
+            main .selectors { grid-row:2; }
+            main .buttons { grid-row:4; }
+            main .results { grid-row:5; }
+            main.showing-progress .selectors { grid-row:2; }
+            main.showing-progress .buttons { grid-row:3; }
+            main.showing-progress .results { grid-row:2 / 5; }
+        }
     </style>
 </head>
 <body>
+    <svg class="icon-definitions" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <symbol id="icon-golf-player" viewBox="0 0 40 48">
+                <path d="m6 19 5 1-3 17-5-1Z" fill="#b4844f" stroke="#775432" stroke-width="1" />
+                <path d="M6 20 4 10m5 10L9 8M3 10h4m1-2h4" fill="none" stroke="#536b78" stroke-width="1.5" stroke-linecap="round" />
+                <path d="M15 13h5v6h-5z" fill="#c9956a" />
+                <circle cx="17.5" cy="10" r="4.5" fill="#e3b98d" />
+                <path d="M12.5 9c0-6 10-6 10-1L27 9H12.5Z" fill="#203c55" />
+                <path d="m13 17 8-1 5 9-5 2-2-5 2 10H11l1-11-3 7-4-2 6-9Z" fill="currentColor" />
+                <path d="m14 17 3.5 4 3-4M17.5 21v4" fill="none" stroke="#f2f5e9" stroke-width="1.1" stroke-linecap="round" />
+                <path d="m24 24 7 5-2 3-8-6ZM5 26l4 1-1 6-3-1Z" fill="#e3b98d" />
+                <path d="M11 31h10l3 12h-5l-3-9-2 9H9Z" fill="#4b6482" />
+                <path d="m17 33 2 10" fill="none" stroke="#2f465b" stroke-width="1.1" />
+                <path d="M9 42h5v4H6c-1-2 1-4 3-4Zm10 0h5l3 3v1h-8Z" fill="#1b2f40" />
+                <path d="M7 46h7m6 0h7" fill="none" stroke="#f3f3e9" stroke-width="1" stroke-linecap="round" />
+                <path d="m31 19-3 25" fill="none" stroke="#536b78" stroke-width="1.5" stroke-linecap="round" />
+                <path d="m28 43 8-1v3l-7 1Z" fill="#30434d" />
+            </symbol>
+            <symbol id="icon-finish-flag" viewBox="0 0 24 24">
+                <path d="M5 22V3m0 1h15v10H5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M5 4h5v5H5zm10 0h5v5h-5zm-5 5h5v5h-5z" fill="currentColor" />
+            </symbol>
+        </defs>
+    </svg>
     <img src="course.jpg" alt="bg" class="bg">
     <main>
-        <img src="ROYAL_OBIDOS_Logo.png" alt="logo" class="logo">
+        <header class="app-header">
+            <img src="ROYAL_OBIDOS_Logo.png" alt="Royal Óbidos Marshall" class="logo">
+            <span id="active-mode" class="active-mode" aria-live="polite">Saída do T1</span>
+            <button id="menu-toggle" class="menu-toggle" type="button" aria-label="Escolher modo de saída" aria-expanded="false" aria-controls="mode-menu">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" focusable="false">
+                    <path d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+            <nav id="mode-menu" class="mode-menu" aria-label="Modo de saída" hidden>
+                <p>Modo de saída</p>
+                <button type="button" class="mode-option" data-mode="t1" data-start-hole="1" aria-pressed="true">
+                    <span class="mode-check" aria-hidden="true">✓</span>
+                    <span><strong>Saída do T1</strong><small>Percurso 1 → 18 · Padrão</small></span>
+                </button>
+                <button type="button" class="mode-option" data-mode="t10" data-start-hole="10" aria-pressed="false">
+                    <span class="mode-check" aria-hidden="true">✓</span>
+                    <span><strong>Saída do T10</strong><small>Percurso 10 → 18 → 1 → 9</small></span>
+                </button>
+                <button type="button" class="mode-option" data-mode="shotgun" aria-pressed="false">
+                    <span class="mode-check" aria-hidden="true">✓</span>
+                    <span><strong>Shotgun</strong><small>Hora e buraco de partida à escolha</small></span>
+                </button>
+            </nav>
+        </header>
 
-        <div class="tee-time">
-            <label for="tee-time">Tee Time:</label>
+        <div class="selectors">
+        <div id="tee-time-field" class="tee-time parameter">
+            <label id="tee-time-label" for="tee-time">Tee Time</label>
             <select id="tee-time" name="tee-time">
                 <!-- Tee Time options will be added here -->
             </select>
         </div>
 
-        <div class="hole">
-            <label for="hole">Buraco:</label>
+        <div id="shotgun-time-field" class="shotgun-time parameter" hidden>
+            <label for="shotgun-time">Hora de partida</label>
+            <input id="shotgun-time" name="shotgun-time" type="time" value="09:00" step="60" required>
+        </div>
+        <div id="shotgun-start-field" class="shotgun-start parameter" hidden>
+            <label id="shotgun-start-hole-label" for="shotgun-start-hole">Buraco de saída</label>
+            <select id="shotgun-start-hole" name="shotgun-start-hole"></select>
+        </div>
+
+        <div class="hole parameter">
+            <label id="hole-label" for="hole">Buraco</label>
             <select id="hole" name="hole">
                 <!-- Hole options will be added here -->
                 <option value="1">1</option>
@@ -116,15 +860,32 @@
                 <option value="18">18</option>
             </select>
         </div>
+        </div>
+        <p id="swipe-hint" class="swipe-hint" hidden>Desliza para os lados ou toca nas setas</p>
 
         <div class="buttons">
-            <button id="calculate-end-time">Calcular Tempo de Termino</button>
-            <button id="clear-result">Limpar</button>
+            <button id="calculate-end-time" type="button" aria-label="Calcular tempo de término">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                    <circle cx="12" cy="12" r="9" />
+                    <path d="M12 7v5l3 2" />
+                </svg>
+                Calcular
+            </button>
+            <button id="clear-result" type="button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                    <path d="M3 11a9 9 0 1 1 2.7 7M3 4v7h7" />
+                </svg>
+                Limpar
+            </button>
         </div>
 
         <div class="results">
             <div id="result"></div>
             <div id="time-difference" class="time-difference"></div>
+            <div id="result-view-toggle" class="result-view-toggle" role="group" aria-label="Visualização do resultado" hidden>
+                <button type="button" data-result-view="table" aria-pressed="true" aria-controls="hole-times-table">Tabela</button>
+                <button type="button" data-result-view="progress" aria-pressed="false" aria-controls="hole-progress">Progresso</button>
+            </div>
             <table id="hole-times-table" style="display: none;">
                 <thead>
                     <tr>
@@ -136,8 +897,59 @@
                     <!-- Rows will be added dynamically -->
                 </tbody>
             </table>
+            <section id="hole-progress" class="hole-progress" aria-label="Progresso esperado do jogador" hidden>
+                <button id="progress-expand" class="progress-expand" type="button" aria-label="Ampliar painel de progresso" aria-haspopup="dialog" aria-controls="progress-dialog" aria-expanded="false">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5" /></svg>
+                </button>
+                <div id="pace-gap" class="pace-gap">
+                    <div class="gap-heading"><div class="current-hole"><span class="current-hole-title">Buraco atual</span><strong id="progress-current-hole"></strong></div><div class="gap-status"><span id="pace-status" class="pace-status" hidden>Atrasado</span><strong id="gap-time"></strong></div></div>
+                    <div id="gap-track" class="gap-track" role="img" aria-label="Diferença para a posição prevista">
+                        <div id="gap-fill" class="gap-fill"></div>
+                        <span id="gap-player" class="gap-marker player" aria-hidden="true"><svg viewBox="0 0 40 48"><use href="#icon-golf-player" /></svg></span>
+                        <span id="gap-expected" class="gap-marker expected" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#icon-finish-flag" /></svg></span>
+                    </div>
+                    <div class="gap-legend"><span><svg viewBox="0 0 40 48" aria-hidden="true"><use href="#icon-golf-player" /></svg><span id="gap-reference"></span></span><span id="gap-scale" class="gap-scale"></span><span><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-finish-flag" /></svg><span id="gap-expected-label">Previsto</span></span></div>
+                </div>
+                <div class="ideal-progress">
+                <p id="progress-caption" class="progress-caption">Onde deveria estar agora</p>
+                <div class="progress-summary">
+                    <strong id="progress-hole"><span id="progress-hole-prefix"></span><span id="progress-expected-hole" class="expected-hole-number"></span></strong>
+                    <span id="progress-percent"></span>
+                </div>
+                <div class="progress-route">
+                    <svg class="golf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Tee de saída">
+                        <circle cx="12" cy="6" r="3.5" />
+                        <path d="M7 11h10l-5 4-5-4Zm5 4v7M9 22h6" />
+                    </svg>
+                    <div id="progress-track" class="progress-track" role="progressbar" aria-label="Percentagem esperada do buraco" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                        <div id="progress-fill" class="progress-fill"></div>
+                    </div>
+                    <svg class="golf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Buraco com bandeira">
+                        <path d="M10 19V3l9 4-9 4" />
+                        <ellipse cx="10" cy="19" rx="7" ry="2.5" />
+                    </svg>
+                </div>
+                <div class="progress-interval"><span id="progress-start"></span><span id="progress-end"></span></div>
+                </div>
+            </section>
         </div>
     </main>
+    <dialog id="progress-dialog" class="progress-dialog" aria-labelledby="progress-dialog-title" aria-describedby="progress-dialog-context">
+        <header class="progress-dialog-header">
+            <div><span id="progress-dialog-mode" class="dialog-mode"></span><h2 id="progress-dialog-title">Progresso</h2></div>
+            <div class="dialog-actions">
+                <button id="progress-landscape" class="landscape-button" type="button" aria-label="Ampliar em ecrã inteiro e ver na horizontal">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="3" width="10" height="18" rx="2" /><path d="M3 10a9 9 0 0 1 3-6M3 4v6h6m12 4a9 9 0 0 1-3 6m3 0v-6h-6" /></svg>
+                    <span id="progress-landscape-label">Horizontal</span>
+                </button>
+                <button id="progress-dialog-close" type="button" aria-label="Fechar vista ampliada" autofocus>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+                </button>
+            </div>
+        </header>
+        <div class="dialog-meta"><p id="progress-dialog-context"></p></div>
+        <div id="progress-dialog-panel"></div>
+    </dialog>
     
     <script>
         const teeTimeSelect = document.getElementById('tee-time');
@@ -146,6 +958,124 @@
         const timeDifferenceDiv = document.getElementById('time-difference');
         const calculateButton = document.getElementById('calculate-end-time');
         const clearButton = document.getElementById('clear-result');
+        const menuToggle = document.getElementById('menu-toggle');
+        const modeMenu = document.getElementById('mode-menu');
+        const modeButtons = Array.from(document.querySelectorAll('.mode-option'));
+        const shotgunTimeInput = document.getElementById('shotgun-time');
+        const shotgunStartSelect = document.getElementById('shotgun-start-hole');
+        let currentMode = 't1';
+        let startingHole = 1;
+        const resultViewToggle = document.getElementById('result-view-toggle');
+        const resultViewButtons = Array.from(document.querySelectorAll('[data-result-view]'));
+        const holeProgress = document.getElementById('hole-progress');
+        let resultView = 'table';
+        let calculation = null;
+        let resultTimer = null;
+        const progressDialog = document.getElementById('progress-dialog');
+        const progressExpand = document.getElementById('progress-expand');
+        const landscapeButton = document.getElementById('progress-landscape');
+        let progressPlaceholder = null;
+        let enteredDetailFullscreen = false;
+        let detailOrientationLocked = false;
+        let landscapeRequestId = 0;
+
+        function updateOrientationButton() {
+            if (!progressDialog.open) return;
+            const horizontal = window.matchMedia('(orientation: landscape)').matches;
+            document.getElementById('progress-landscape-label').textContent = horizontal ? 'Ecrã inteiro' : 'Horizontal';
+        }
+
+        function openProgressDialog() {
+            if (!calculation || resultView !== 'progress' || progressDialog.open) return;
+            progressPlaceholder = document.createComment('progress-panel-home');
+            holeProgress.before(progressPlaceholder);
+            document.getElementById('progress-dialog-panel').append(holeProgress);
+            document.getElementById('progress-dialog-mode').textContent = document.getElementById('active-mode').textContent;
+            const start = new Date(calculation.schedule[0].start).toTimeString().slice(0, 5);
+            document.getElementById('progress-dialog-context').textContent = `Partida ${start} · Fim do buraco ${calculation.selectedHole}`;
+            document.documentElement.classList.add('progress-dialog-open');
+            progressExpand.setAttribute('aria-expanded', 'true');
+            progressDialog.showModal();
+            updateOrientationButton();
+            document.getElementById('progress-dialog-close').focus({ preventScroll: true });
+            refreshResultClock();
+        }
+
+        function restoreProgressPanel(restoreFocus) {
+            if (!progressPlaceholder) return;
+            landscapeRequestId++;
+            progressPlaceholder.replaceWith(holeProgress);
+            progressPlaceholder = null;
+            document.documentElement.classList.remove('progress-dialog-open');
+            progressExpand.setAttribute('aria-expanded', 'false');
+            landscapeButton.disabled = false;
+            if (detailOrientationLocked) {
+                try { screen.orientation?.unlock?.(); } catch {}
+                detailOrientationLocked = false;
+            }
+            if (enteredDetailFullscreen && document.fullscreenElement === document.documentElement) {
+                document.exitFullscreen().catch(() => {});
+            }
+            enteredDetailFullscreen = false;
+            if (restoreFocus && !holeProgress.hidden) progressExpand.focus({ preventScroll: true });
+        }
+
+        function closeProgressDialog(restoreFocus = true) {
+            if (progressDialog.open) progressDialog.close();
+            restoreProgressPanel(restoreFocus);
+        }
+
+        holeProgress.addEventListener('click', openProgressDialog);
+        document.getElementById('progress-dialog-close').addEventListener('click', () => closeProgressDialog());
+        progressDialog.addEventListener('cancel', event => { event.preventDefault(); closeProgressDialog(); });
+        progressDialog.addEventListener('keydown', event => {
+            if (event.key !== 'Tab') return;
+            const controls = Array.from(progressDialog.querySelectorAll('button:not([disabled])')).filter(button => button.getClientRects().length > 0);
+            const first = controls[0];
+            const last = controls[controls.length - 1];
+            if (event.shiftKey && document.activeElement === first) {
+                event.preventDefault();
+                last.focus();
+            } else if (!event.shiftKey && document.activeElement === last) {
+                event.preventDefault();
+                first.focus();
+            }
+        });
+        progressDialog.addEventListener('close', () => { if (!progressDialog.open) restoreProgressPanel(true); });
+        progressDialog.addEventListener('click', event => {
+            if (event.target !== progressDialog) return;
+            const rect = progressDialog.getBoundingClientRect();
+            if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) closeProgressDialog();
+        });
+        window.addEventListener('resize', updateOrientationButton);
+        landscapeButton.addEventListener('click', async () => {
+            const requestId = ++landscapeRequestId;
+            landscapeButton.disabled = true;
+            try {
+                if (document.fullscreenEnabled && !document.fullscreenElement) {
+                    await document.documentElement.requestFullscreen();
+                    enteredDetailFullscreen = true;
+                }
+                if (!progressDialog.open || requestId !== landscapeRequestId) {
+                    if (enteredDetailFullscreen && document.fullscreenElement === document.documentElement) await document.exitFullscreen();
+                    enteredDetailFullscreen = false;
+                    return;
+                }
+                if (!window.matchMedia('(orientation: landscape)').matches && typeof screen.orientation?.lock === 'function') {
+                    await screen.orientation.lock('landscape');
+                    detailOrientationLocked = true;
+                    if (!progressDialog.open || requestId !== landscapeRequestId) {
+                        screen.orientation.unlock();
+                        detailOrientationLocked = false;
+                    }
+                }
+            } catch {
+                // Manual rotation remains available when fullscreen or locking is unsupported.
+            } finally {
+                landscapeButton.disabled = false;
+                updateOrientationButton();
+            }
+        });
 
         const startHour = 8;
         const endHour = 14;
@@ -154,6 +1084,9 @@
         const holeTimes = [
             16, 19, 13, 15, 19, 12, 17, 13, 15, 16, 19, 16, 12, 16, 13, 15, 15, 19
         ];
+        // Hole Pace from the supplied Shotgun sheet: 4h40 for all 18 holes.
+        // Rotate these durations from the chosen starting hole, then add the start time.
+        shotgunStartSelect.replaceChildren(...Array.from(holeSelect.options, option => option.cloneNode(true)));
 
         for (let hour = startHour; hour <= endHour; hour++) {
             for (let minutes = 0; minutes < 60; minutes += incrementMinutes) {
@@ -166,24 +1099,371 @@
             }
         }
 
+        function createSwipeSelector(select, previousLabel, nextLabel) {
+            const control = document.createElement('div');
+            control.className = 'swipe-selector';
+
+            const previous = document.createElement('button');
+            previous.type = 'button';
+            previous.className = 'swipe-step';
+            previous.textContent = '\u2039';
+            previous.setAttribute('aria-label', previousLabel);
+
+            const value = document.createElement('div');
+            value.id = `${select.id}-swipe`;
+            value.className = 'swipe-value';
+            value.tabIndex = 0;
+            value.setAttribute('role', 'spinbutton');
+            value.setAttribute('aria-labelledby', `${select.id}-label`);
+            value.setAttribute('aria-describedby', 'swipe-hint');
+            const number = document.createElement('span');
+            number.className = 'swipe-number';
+            value.append(number);
+
+            const next = document.createElement('button');
+            next.type = 'button';
+            next.className = 'swipe-step';
+            next.textContent = '\u203a';
+            next.setAttribute('aria-label', nextLabel);
+
+            function numericValue(option) {
+                if (select.id === 'tee-time') {
+                    const [hours, minutes] = option.value.split(':').map(Number);
+                    return hours * 60 + minutes;
+                }
+                return Number(option.value);
+            }
+
+            function render() {
+                const index = select.selectedIndex;
+                const option = select.options[index];
+                number.textContent = option.textContent;
+                const numericOptions = Array.from(select.options, numericValue);
+                value.setAttribute('aria-valuemin', Math.min(...numericOptions));
+                value.setAttribute('aria-valuemax', Math.max(...numericOptions));
+                value.setAttribute('aria-valuenow', numericValue(option));
+                value.setAttribute('aria-valuetext', option.textContent);
+                previous.disabled = index === 0;
+                next.disabled = index === select.options.length - 1;
+            }
+
+            function choose(index) {
+                const boundedIndex = Math.max(0, Math.min(select.options.length - 1, index));
+                if (boundedIndex === select.selectedIndex) return;
+                select.selectedIndex = boundedIndex;
+                select.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+
+            const pixelsPerStep = 22;
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+            const clamp = position => Math.max(0, Math.min(select.options.length - 1, position));
+            let momentumFrame = 0;
+            let gesture = null;
+
+            function stopMotion() {
+                cancelAnimationFrame(momentumFrame);
+                momentumFrame = 0;
+                value.classList.remove('is-dragging');
+                number.style.transform = '';
+            }
+
+            function showPosition(position) {
+                choose(Math.round(position));
+                if (!reducedMotion.matches) {
+                    number.style.transform = `translateX(${(select.selectedIndex - position) * pixelsPerStep * 0.5}px)`;
+                }
+            }
+
+            function stepBy(delta) {
+                stopMotion();
+                choose(select.selectedIndex + delta);
+            }
+
+            previous.addEventListener('click', () => stepBy(-1));
+            next.addEventListener('click', () => stepBy(1));
+            select.addEventListener('change', render);
+            value.addEventListener('keydown', event => {
+                const steps = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1 };
+                if (event.key in steps) {
+                    event.preventDefault();
+                    stepBy(steps[event.key]);
+                } else if (event.key === 'Home' || event.key === 'End') {
+                    event.preventDefault();
+                    stopMotion();
+                    choose(event.key === 'Home' ? 0 : select.options.length - 1);
+                }
+            });
+
+            value.addEventListener('pointerdown', event => {
+                if (!event.isPrimary || event.button !== 0) return;
+                stopMotion();
+                gesture = {
+                    id: event.pointerId, x: event.clientX, y: event.clientY,
+                    lastX: event.clientX, time: event.timeStamp,
+                    position: select.selectedIndex, velocity: 0, dragging: false
+                };
+                value.setPointerCapture(event.pointerId);
+            });
+
+            value.addEventListener('pointermove', event => {
+                if (!gesture || gesture.id !== event.pointerId) return;
+                if (!gesture.dragging) {
+                    const dx = event.clientX - gesture.x;
+                    const dy = event.clientY - gesture.y;
+                    if (Math.abs(dx) < 6 || Math.abs(dx) <= Math.abs(dy)) return;
+                    gesture.dragging = true;
+                    value.classList.add('is-dragging');
+                }
+                const elapsed = Math.max(1, event.timeStamp - gesture.time);
+                const position = clamp(gesture.position - (event.clientX - gesture.lastX) / pixelsPerStep);
+                gesture.velocity = gesture.velocity * 0.4 + (position - gesture.position) / elapsed * 0.6;
+                gesture.position = position;
+                gesture.lastX = event.clientX;
+                gesture.time = event.timeStamp;
+                showPosition(position);
+            });
+
+            value.addEventListener('pointerup', event => {
+                if (!gesture || gesture.id !== event.pointerId) return;
+                const finished = gesture;
+                gesture = null;
+                if (!finished.dragging) return;
+                const recentFlick = event.timeStamp - finished.time < 100
+                    && Math.abs(event.clientX - finished.x) >= 14
+                    && Math.abs(finished.velocity) > 0.01;
+                const coast = recentFlick && !reducedMotion.matches
+                    ? Math.max(-2, Math.min(2, finished.velocity * 90)) : 0;
+                const target = Math.round(clamp(finished.position + coast));
+                if (!coast || target === select.selectedIndex) {
+                    choose(target);
+                    stopMotion();
+                    return;
+                }
+
+                const started = performance.now();
+                function settle(now) {
+                    const progress = Math.min(1, (now - started) / 180);
+                    const ease = 1 - Math.pow(1 - progress, 3);
+                    showPosition(finished.position + (target - finished.position) * ease);
+                    if (progress < 1) momentumFrame = requestAnimationFrame(settle);
+                    else stopMotion();
+                }
+                momentumFrame = requestAnimationFrame(settle);
+            });
+            value.addEventListener('pointercancel', () => {
+                gesture = null;
+                stopMotion();
+            });
+            value.addEventListener('lostpointercapture', () => {
+                if (!gesture) return;
+                gesture = null;
+                stopMotion();
+            });
+
+            control.append(previous, value, next);
+            select.after(control);
+            select.hidden = true;
+            document.getElementById(`${select.id}-label`).addEventListener('click', event => {
+                event.preventDefault();
+                value.focus();
+            });
+            render();
+            return { refresh() { gesture = null; stopMotion(); render(); } };
+        }
+
+        createSwipeSelector(teeTimeSelect, 'Tee time anterior: menos 10 minutos', 'Tee time seguinte: mais 10 minutos');
+        const holeControl = createSwipeSelector(holeSelect, 'Buraco anterior', 'Buraco seguinte');
+        createSwipeSelector(shotgunStartSelect, 'Buraco de saída anterior', 'Buraco de saída seguinte');
+        document.getElementById('swipe-hint').hidden = false;
+
+        function getHoleOrder() {
+            return Array.from({ length: holeTimes.length }, (_, index) => (startingHole - 1 + index) % holeTimes.length + 1);
+        }
+
+        function resetCourse() {
+            holeSelect.replaceChildren(...getHoleOrder().map(hole => new Option(String(hole), String(hole))));
+            holeControl.refresh();
+            clearResult();
+        }
+
+        shotgunStartSelect.addEventListener('change', () => {
+            if (currentMode !== 'shotgun') return;
+            startingHole = Number(shotgunStartSelect.value);
+            resetCourse();
+        });
+        shotgunTimeInput.addEventListener('input', clearResult);
+
+        function setMenuOpen(open, restoreFocus = false) {
+            modeMenu.hidden = !open;
+            menuToggle.setAttribute('aria-expanded', String(open));
+            if (open) modeMenu.querySelector('[aria-pressed="true"]').focus();
+            else if (restoreFocus) menuToggle.focus();
+        }
+
+        menuToggle.addEventListener('click', () => setMenuOpen(modeMenu.hidden));
+        document.addEventListener('click', event => {
+            if (!event.target.closest('.app-header')) setMenuOpen(false);
+        });
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape' && !modeMenu.hidden) {
+                event.preventDefault();
+                setMenuOpen(false, true);
+            }
+        });
+        modeButtons.forEach(button => button.addEventListener('click', () => {
+            const selectedMode = button.dataset.mode;
+            if (currentMode !== selectedMode) {
+                currentMode = selectedMode;
+                const isShotgun = currentMode === 'shotgun';
+                startingHole = Number(isShotgun ? shotgunStartSelect.value : button.dataset.startHole);
+                document.getElementById('tee-time-field').hidden = isShotgun;
+                document.getElementById('shotgun-time-field').hidden = !isShotgun;
+                document.getElementById('shotgun-start-field').hidden = !isShotgun;
+                document.querySelector('.selectors').classList.toggle('is-shotgun', isShotgun);
+                document.querySelector('main').classList.toggle('shotgun-mode', isShotgun);
+                document.getElementById('hole-label').textContent = isShotgun ? 'Buraco atual' : 'Buraco';
+                document.getElementById('active-mode').textContent = isShotgun ? 'Shotgun' : `Saída do T${startingHole}`;
+                modeButtons.forEach(option => option.setAttribute('aria-pressed', String(option === button)));
+                resetCourse();
+            }
+            setMenuOpen(false, true);
+        }));
+
+        function getExpectedProgress(schedule, now) {
+            const first = schedule[0];
+            const last = schedule[schedule.length - 1];
+            if (now < first.start) return { ...first, state: 'waiting', percentage: 0 };
+            if (now >= last.end) return { ...last, state: 'complete', percentage: 100 };
+            const current = schedule.find(segment => now < segment.end);
+            return { ...current, state: 'playing', percentage: (now - current.start) / (current.end - current.start) * 100 };
+        }
+
+        function applyResultView() {
+            const hasResult = calculation !== null;
+            if (!hasResult || resultView !== 'progress') closeProgressDialog(false);
+            resultViewToggle.hidden = !hasResult;
+            document.getElementById('hole-times-table').style.display = hasResult && resultView === 'table' ? 'table' : 'none';
+            holeProgress.hidden = !hasResult || resultView !== 'progress';
+            document.querySelector('main').classList.toggle('showing-progress', hasResult && resultView === 'progress');
+            resultViewButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.resultView === resultView)));
+        }
+
+        resultViewButtons.forEach(button => button.addEventListener('click', () => {
+            resultView = button.dataset.resultView;
+            refreshResultClock();
+            applyResultView();
+        }));
+
+        function getPaceGap(schedule, selectedHole, now) {
+            const start = schedule[0].start;
+            const finish = schedule[schedule.length - 1].end;
+            const player = schedule.find(segment => segment.hole === selectedHole).end;
+            const frontNine = selectedHole <= 9;
+            const firstHole = frontNine ? 1 : 10;
+            const lastHole = frontNine ? 9 : 18;
+            const minutesBeforePlayer = holeTimes.slice(firstHole - 1, selectedHole).reduce((total, minutes) => total + minutes, 0);
+            const scaleMinutes = holeTimes.slice(firstHole - 1, lastHole).reduce((total, minutes) => total + minutes, 0);
+            // Anchor this physical half to the selected hole's occurrence in T1, T10 or Shotgun order.
+            const scaleStart = player - minutesBeforePlayer * 60000;
+            const scaleEnd = scaleStart + scaleMinutes * 60000;
+            const scale = { scaleStartHole: frontNine ? 1 : 9, scaleEndHole: lastHole, scaleMinutes };
+            if (now < start) return { ...scale, milliseconds: 0, playerPercent: 0, expectedPercent: 0, waiting: true, expectedOffscale: null };
+            const expected = Math.max(start, Math.min(finish, now));
+            const toPercent = timestamp => Math.max(0, Math.min(100, (timestamp - scaleStart) / (scaleEnd - scaleStart) * 100));
+            return {
+                ...scale,
+                milliseconds: expected - player,
+                playerPercent: toPercent(player),
+                expectedPercent: toPercent(expected),
+                waiting: false,
+                expectedOffscale: expected < scaleStart ? 'before' : expected > scaleEnd ? 'after' : null
+            };
+        }
+
+        function refreshResultClock(now = Date.now()) {
+            if (!calculation) return;
+            const selected = calculation.schedule.find(segment => segment.hole === calculation.selectedHole);
+            const timeDifference = now - selected.end;
+            const absTimeDifference = Math.abs(timeDifference);
+            const hoursDifference = Math.floor(absTimeDifference / 3600000);
+            const minutesDifference = Math.floor(absTimeDifference % 3600000 / 60000);
+            const isLate = timeDifference > 0;
+            timeDifferenceDiv.innerHTML = `${isLate ? 'Atrasado: +' : 'A horas: -'} <span>${hoursDifference}h${minutesDifference}m</span>`;
+            timeDifferenceDiv.classList.toggle('red', isLate);
+            timeDifferenceDiv.classList.toggle('green', !isLate);
+            const selectedCell = document.querySelector('[data-selected-hole-time]');
+            if (selectedCell) selectedCell.style.color = isLate ? 'red' : 'green';
+
+            const progress = getExpectedProgress(calculation.schedule, now);
+            const percentage = Math.floor(progress.percentage);
+            const formatTime = timestamp => new Date(timestamp).toTimeString().slice(0, 5);
+            document.getElementById('progress-caption').textContent = progress.state === 'waiting' ? 'Ainda não começou'
+                : progress.state === 'complete' ? 'A volta já deveria estar concluída' : 'Onde deveria estar agora';
+            document.getElementById('progress-hole-prefix').textContent = progress.state === 'complete' ? 'Volta concluída' : 'Buraco ';
+            const expectedHoleNumber = document.getElementById('progress-expected-hole');
+            expectedHoleNumber.hidden = progress.state === 'complete';
+            expectedHoleNumber.textContent = expectedHoleNumber.hidden ? '' : String(progress.hole);
+            document.getElementById('progress-percent').textContent = `${percentage}%`;
+            document.getElementById('progress-fill').style.width = `${progress.percentage}%`;
+            const track = document.getElementById('progress-track');
+            track.setAttribute('aria-valuenow', String(Math.round(progress.percentage * 10) / 10));
+            track.setAttribute('aria-valuetext', `${progress.state === 'complete' ? 'Volta concluída' : `Buraco ${progress.hole}`}: ${percentage}%`);
+            document.getElementById('progress-start').textContent = progress.state === 'complete' ? `Último buraco: ${progress.hole}`
+                : progress.state === 'waiting' ? 'Aguardar partida' : `Entrada: ${formatTime(progress.start)}`;
+            document.getElementById('progress-end').textContent = `${progress.state === 'waiting' ? 'Partida' : 'Término'}: ${formatTime(progress.state === 'waiting' ? progress.start : progress.end)}`;
+
+            const gap = getPaceGap(calculation.schedule, calculation.selectedHole, now);
+            const gapMinutes = Math.floor(Math.abs(gap.milliseconds) / 60000);
+            const durationLabel = gapMinutes === 0 ? '<1 min' : gapMinutes >= 60 ? `${Math.floor(gapMinutes / 60)}h ${gapMinutes % 60}m` : `${gapMinutes} min`;
+            const gapText = gap.waiting ? 'Aguardar partida' : gap.milliseconds > 0 ? `Faltam ${durationLabel}`
+                : gap.milliseconds < 0 ? `${durationLabel} de avanço` : 'Em linha';
+            document.getElementById('pace-gap').dataset.state = gap.waiting ? 'waiting' : gap.milliseconds > 0 ? 'behind' : gap.milliseconds < 0 ? 'ahead' : 'on-time';
+            document.getElementById('pace-gap').dataset.timing = isLate ? 'late' : 'on-time';
+            document.getElementById('pace-status').hidden = !isLate;
+            document.getElementById('gap-time').textContent = gapText;
+            document.getElementById('progress-current-hole').textContent = String(calculation.selectedHole);
+            document.getElementById('gap-reference').textContent = `Fim do B${calculation.selectedHole}`;
+            document.getElementById('gap-scale').textContent = `${gap.scaleStartHole}–${gap.scaleEndHole}`;
+            document.getElementById('gap-expected-label').textContent = gap.expectedOffscale
+                ? `${gap.expectedOffscale === 'before' ? '← ' : ''}Previsto B${progress.hole}${gap.expectedOffscale === 'after' ? ' →' : ''}` : 'Previsto';
+            document.getElementById('gap-expected').dataset.offscale = gap.expectedOffscale || '';
+            document.getElementById('gap-player').style.left = `${gap.playerPercent}%`;
+            document.getElementById('gap-expected').style.left = `${gap.expectedPercent}%`;
+            document.getElementById('gap-fill').style.left = `${Math.min(gap.playerPercent, gap.expectedPercent)}%`;
+            document.getElementById('gap-fill').style.width = `${Math.abs(gap.playerPercent - gap.expectedPercent)}%`;
+            document.getElementById('gap-track').setAttribute('aria-label', `${gapText}. Referência: término do buraco ${calculation.selectedHole}. Escala: buracos ${gap.scaleStartHole} a ${gap.scaleEndHole}.${gap.expectedOffscale ? ` A posição prevista no buraco ${progress.hole} está fora desta faixa.` : ''}`);
+        }
+
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) refreshResultClock();
+        });
+
         function calculateEndTime() {
-            const teeTime = teeTimeSelect.value;
+            if (currentMode === 'shotgun' && !shotgunTimeInput.reportValidity()) return;
+            const teeTime = currentMode === 'shotgun' ? shotgunTimeInput.value : teeTimeSelect.value;
             const hole = parseInt(holeSelect.value);
 
             const [hour, minute] = teeTime.split(':').map(Number);
             const teeTimeDate = new Date();
             teeTimeDate.setHours(hour, minute, 0, 0);
 
-            let totalMinutes = 0;
             const holeTimesTable = document.getElementById('hole-times-table');
             const tbody = holeTimesTable.querySelector('tbody');
             tbody.innerHTML = ''; // Clear previous results
 
-            const holesToShow = [hole - 1, hole, hole + 1].filter(h => h > 0 && h <= holeTimes.length);
+            const holeOrder = getHoleOrder();
+            let nextStart = teeTimeDate.getTime();
+            const schedule = holeOrder.map(holeNumber => {
+                const segment = { hole: holeNumber, start: nextStart, end: nextStart + holeTimes[holeNumber - 1] * 60000 };
+                nextStart = segment.end;
+                return segment;
+            });
+            const selectedIndex = schedule.findIndex(segment => segment.hole === hole);
+            const holesToShow = schedule.slice(Math.max(0, selectedIndex - 1), selectedIndex + 2);
 
-            holesToShow.forEach(h => {
-                totalMinutes = holeTimes.slice(0, h).reduce((acc, time) => acc + time, 0);
-                const endTimeDate = new Date(teeTimeDate.getTime() + totalMinutes * 60000);
+            holesToShow.forEach(segment => {
+                const h = segment.hole;
+                const endTimeDate = new Date(segment.end);
                 const endTime = endTimeDate.toTimeString().slice(0, 5);
 
                 const row = document.createElement('tr');
@@ -194,14 +1474,7 @@
                 timeCell.textContent = endTime;
 
                 if (h === hole) {
-                    const currentTime = new Date();
-                    const timeDifference = currentTime - endTimeDate;
-
-                    if (currentTime > endTimeDate) {
-                        timeCell.style.color = 'red';
-                    } else {
-                        timeCell.style.color = 'green';
-                    }
+                    timeCell.dataset.selectedHoleTime = '';
                 }
 
                 row.appendChild(holeCell);
@@ -209,37 +1482,24 @@
                 tbody.appendChild(row);
             });
 
-            holeTimesTable.style.display = 'table';
-
-            // Calculate the end time for the selected hole
-            totalMinutes = holeTimes.slice(0, hole).reduce((acc, time) => acc + time, 0);
-            const endTimeDate = new Date(teeTimeDate.getTime() + totalMinutes * 60000);
-
-            const currentTime = new Date();
-            const timeDifference = currentTime - endTimeDate;
-
-            const absTimeDifference = Math.abs(timeDifference);
-            const hoursDifference = Math.floor(absTimeDifference / (1000 * 60 * 60));
-            const minutesDifference = Math.floor((absTimeDifference % (1000 * 60 * 60)) / (1000 * 60));
-
-            if (currentTime > endTimeDate) {
-                timeDifferenceDiv.innerHTML = `Atrasado: + <span style="color: red; font-weight: bold;">${hoursDifference}h${minutesDifference}m</span>`;
-                timeDifferenceDiv.classList.remove('green');
-                timeDifferenceDiv.classList.add('red');
-            } else {
-                timeDifferenceDiv.innerHTML = `A horas: - <span style="color: green; font-weight: bold;">${hoursDifference}h${minutesDifference}m</span>`;
-                timeDifferenceDiv.classList.remove('red');
-                timeDifferenceDiv.classList.add('green');
-            }
+            calculation = { schedule, selectedHole: hole };
+            clearInterval(resultTimer);
+            refreshResultClock();
+            applyResultView();
+            resultTimer = setInterval(refreshResultClock, 1000);
         }
 
         function clearResult() {
+            clearInterval(resultTimer);
+            resultTimer = null;
+            calculation = null;
             resultDiv.textContent = '';
             timeDifferenceDiv.textContent = '';
             timeDifferenceDiv.classList.remove('red', 'green');
             const holeTimesTable = document.getElementById('hole-times-table');
             holeTimesTable.style.display = 'none';
             holeTimesTable.querySelector('tbody').innerHTML = '';
+            applyResultView();
         }
 
         calculateButton.addEventListener('click', calculateEndTime);
