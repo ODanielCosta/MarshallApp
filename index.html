@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#345326">
+    <meta name="theme-color" content="#1e3859">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Marshall">
@@ -752,11 +752,53 @@
             .progress-dialog .gap-track { height: 10px; margin: 12px 6px; }
             .progress-dialog .gap-marker.player { width: 28px; height: 34px; }
         }
-        /* Unified bar: equal outer columns keep the mode at the true centre. */
-        main .app-header { display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); align-items:center; box-sizing:border-box; gap:8px; padding:8px 10px; border:1px solid #ced9c8; border-radius:16px; background:#fffffff5; box-shadow:0 4px 16px #20351418; }
-        main .app-header .logo { width:76px; max-width:100%; justify-self:start; }
-        .app-header .active-mode { justify-self:center; padding:6px 0; border:0; border-radius:0; background:transparent; color:#25451c; font-size:14px; text-align:center; }
-        .app-header .menu-toggle { width:44px; justify-self:end; }
+        /* Keep the compact bar above the content, including on notched screens. */
+        :root { --app-header-height:56px; --brand-navy:#1e3859; }
+        body > main, body > main.showing-progress {
+            padding-top:calc(var(--app-header-height) + env(safe-area-inset-top) + 12px);
+        }
+        .app-header {
+            position:fixed;
+            top:0;
+            left:0;
+            right:0;
+            z-index:1000;
+            display:grid;
+            grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+            align-items:center;
+            box-sizing:border-box;
+            width:100%;
+            max-width:none;
+            height:calc(var(--app-header-height) + env(safe-area-inset-top));
+            gap:8px;
+            margin:0;
+            padding:calc(6px + env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) 6px max(12px, env(safe-area-inset-left));
+            border:0;
+            border-radius:0;
+            background:var(--brand-navy);
+            box-shadow:0 2px 8px #14283e26;
+        }
+        .app-header .logo {
+            display:block;
+            width:auto;
+            height:40px;
+            max-width:100%;
+            object-fit:contain;
+            justify-self:start;
+            filter:brightness(0) invert(1);
+        }
+        .app-header .active-mode { justify-self:center; padding:0; border:0; border-radius:0; background:transparent; color:white; font-size:14px; line-height:1.2; text-align:center; }
+        .app-header .menu-toggle { width:44px; height:44px; justify-self:end; border-color:#ffffff55; border-radius:10px; background:transparent; color:white; box-shadow:none; }
+        .app-header .menu-toggle:hover, .app-header .menu-toggle[aria-expanded="true"] { background:#ffffff18; }
+        .app-header .menu-toggle:focus-visible { outline-color:white; }
+        .app-header .mode-menu {
+            position:absolute;
+            top:calc(100% + 6px);
+            right:max(12px, env(safe-area-inset-right));
+            width:min(290px, calc(100% - 24px));
+            max-height:calc(100dvh - var(--app-header-height) - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 18px);
+            overflow-y:auto;
+        }
         /* Interior spacing is included in the panel layout. */
         #pace-gap.pace-gap { padding:14px 12px; }
         #pace-gap.pace-gap::before { inset:0; }
@@ -766,13 +808,14 @@
         #pace-gap[data-timing="late"] #gap-time { font-size:22px; font-weight:600; line-height:1.25; color:#842020; font-variant-numeric:tabular-nums; }
         .progress-dialog #pace-gap[data-timing="late"] #gap-time { font-size:28px; }
         @media (min-width:601px) and (max-height:500px) {
-            main .app-header, main.showing-progress .app-header { grid-column:1 / -1; grid-row:1; max-width:none; margin-bottom:6px; }
-            main .selectors { grid-row:2; }
-            main .buttons { grid-row:4; }
-            main .results { grid-row:5; }
-            main.showing-progress .selectors { grid-row:2; }
-            main.showing-progress .buttons { grid-row:3; }
-            main.showing-progress .results { grid-row:2 / 5; }
+            body > main { grid-template-columns:minmax(0,350px); }
+            main .selectors, main .buttons, main .results, main .swipe-hint { grid-column:1; }
+            main .selectors { grid-row:1; }
+            main .buttons { grid-row:3; }
+            main .results { grid-row:4; }
+            main.showing-progress .selectors { grid-row:1; }
+            main.showing-progress .buttons { grid-row:2; }
+            main.showing-progress .results { grid-row:1 / 4; }
         }
     </style>
 </head>
@@ -802,7 +845,6 @@
         </defs>
     </svg>
     <img src="course.jpg" alt="bg" class="bg">
-    <main>
         <header class="app-header">
             <img src="ROYAL_OBIDOS_Logo.png" alt="Royal Óbidos Marshall" class="logo">
             <span id="active-mode" class="active-mode" aria-live="polite">Saída do T1</span>
@@ -832,6 +874,7 @@
             </nav>
         </header>
 
+    <main>
         <div class="selectors">
         <div id="tee-time-field" class="tee-time parameter">
             <label id="tee-time-label" for="tee-time">Tee Time</label>
