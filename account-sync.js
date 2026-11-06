@@ -11,7 +11,7 @@
   const panel = document.createElement('section');
   panel.id = 'account-panel';
   panel.innerHTML = `
-    <div class="account-bar"><strong id="account-mode">Modo Guest</strong><button type="button" id="account-toggle">Conta</button></div>
+    <div class="account-bar"><strong id="account-mode">Modo Guest</strong><button type="button" id="account-toggle" aria-expanded="false" aria-controls="account-details">Conta</button></div>
     <div id="account-details" hidden>
       <form id="account-form">
         <label>Email <input id="account-email" type="email" autocomplete="username" required></label>
@@ -20,19 +20,24 @@
       </form>
       <p id="account-message" role="status" aria-live="polite"></p>
     </div>`;
-  document.querySelector('main').prepend(panel);
+  const menu = document.getElementById('mode-menu');
+  menu.insertBefore(panel, document.getElementById('install-app'));
   const css = document.createElement('style');
   css.textContent = `
-    #account-panel{width:100%;max-width:350px;box-sizing:border-box;padding:10px 12px;border:1px solid #8da4bf;border-radius:12px;background:#fff;color:#1e3859}
-    .account-bar{display:flex;align-items:center;justify-content:space-between;gap:8px}
-    #account-panel button{border:1px solid #1e3859;border-radius:8px;background:#1e3859;color:white;padding:8px 12px;cursor:pointer}
+    #account-panel{width:100%;box-sizing:border-box;margin-top:8px;padding:12px 10px 4px;border-top:1px solid var(--app-border);color:var(--app-ink)}
+    .account-bar{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:14px}
+    #account-panel button{border:1px solid #1e3859;border-radius:8px;background:#1e3859;color:white;min-height:44px;padding:8px 12px;cursor:pointer}
     #account-details{padding-top:10px}#account-form{display:grid;gap:8px}
-    #account-form label{display:grid;gap:4px;font-size:13px}#account-form input{box-sizing:border-box;width:100%;padding:10px;border:1px solid #8da4bf;border-radius:8px;font:inherit}
+    #account-form label{display:grid;gap:4px;font-size:13px}#account-form input{box-sizing:border-box;width:100%;padding:10px;border:1px solid #8da4bf;border-radius:8px;font:inherit;font-size:16px}
     .account-actions{display:flex;gap:6px;flex-wrap:wrap}#account-message{font-size:12px;overflow-wrap:anywhere;margin:8px 0 0}
   `;
   document.head.append(css);
   const $ = id => document.getElementById(id);
-  $('account-toggle').onclick = () => { $('account-details').hidden = !$('account-details').hidden; };
+  $('account-toggle').onclick = () => {
+    const open = $('account-details').hidden;
+    $('account-details').hidden = !open;
+    $('account-toggle').setAttribute('aria-expanded', String(open));
+  };
   let client, currentUser = null, channel = null, loading = false, timer = null, sequence = 0;
   const today = () => { const d = new Date(); return [d.getFullYear(), String(d.getMonth()+1).padStart(2,'0'), String(d.getDate()).padStart(2,'0')].join('-'); };
   let activeDay = today();
