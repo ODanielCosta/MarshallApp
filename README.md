@@ -2,6 +2,10 @@
 
 Aplicação web para consultar tempos e acompanhar o ritmo de jogo, com saídas do T1, T10 e Shotgun.
 
+## Cálculo em tempo real
+
+Os resultados aparecem ao abrir a app e atualizam imediatamente ao alterar a hora, o buraco ou o modo de saída, incluindo com as setas, teclado e gestos. O relógio e o progresso atualizam a cada segundo. Em Shotgun, uma hora incompleta esconde os resultados até a hora ser válida.
+
 ## Instalar no telemóvel
 
 Abre a app por HTTPS e escolhe **☰ → Instalar app**.

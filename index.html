@@ -264,61 +264,6 @@
             color: var(--app-muted);
             text-align: center;
         }
-        .buttons {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) auto;
-            width: 100%;
-            max-width: 350px;
-            gap: 10px;
-        }
-        main .buttons { margin-top: 4px; }
-        .buttons button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            min-height: 48px;
-            padding: 12px 18px;
-            border: 1px solid var(--brand-navy);
-            border-radius: 14px;
-            font-weight: 600;
-            line-height: 1.2;
-            cursor: pointer;
-            touch-action: manipulation;
-            -webkit-appearance: none;
-            appearance: none;
-        }
-        .buttons svg {
-            width: 18px;
-            height: 18px;
-            flex-shrink: 0;
-        }
-        #calculate-end-time {
-            background: var(--brand-navy);
-            border-color: var(--brand-navy);
-            color: #fff;
-            box-shadow: 0 3px 10px #1e385926;
-        }
-        #clear-result {
-            background: rgba(255, 255, 255, 0.94);
-            color: var(--brand-navy);
-            box-shadow: 0 3px 10px #1e385914;
-        }
-        .buttons button:focus-visible {
-            outline: 3px solid var(--brand-navy);
-            outline-offset: 3px;
-        }
-        .buttons button:active {
-            transform: translateY(1px);
-            box-shadow: none;
-        }
-        @media (hover: hover) {
-            #calculate-end-time:hover { background: #142a45; }
-            #clear-result:hover { background: var(--app-hover); }
-        }
-        @media (prefers-reduced-motion: no-preference) {
-            .buttons button { transition: background-color 140ms ease, box-shadow 140ms ease, transform 140ms ease; }
-        }
         .results{
             margin: 10px;
             display: flex;
@@ -574,7 +519,6 @@
             .swipe-value { min-height: 44px; }
             .shotgun-time input { height: 46px; }
             .parameter { gap: 4px; }
-            .buttons button { min-height: 44px; padding: 10px 16px; }
             .result-view-toggle, table { margin-top: 4px; }
             .hole-progress { padding: 10px; margin-top: 4px; }
             .progress-track { margin: 8px 0 6px; }
@@ -600,10 +544,9 @@
             .app-header { grid-column: 1; grid-row: 1 / 5; align-self: start; flex-wrap: wrap; justify-content: center; }
             .app-header .logo { width: 140px; }
             .mode-menu { position: fixed; top: 110px; right: 12px; width: 290px; }
-            .selectors, .swipe-hint, .buttons, .results { grid-column: 2; margin: 0; }
+            .selectors, .swipe-hint, .results { grid-column: 2; margin: 0; }
             .selectors { grid-row: 1; }
             .swipe-hint { grid-row: 2; }
-            .buttons { grid-row: 3; }
             .results { grid-row: 4; }
             table { margin-top: 6px; }
             th, td { padding: 4px 8px; font-size: 14px; }
@@ -626,9 +569,8 @@
             .showing-progress .app-header { grid-column: 1; grid-row: 1; flex-wrap: nowrap; justify-content: space-between; margin: 0; }
             .showing-progress .app-header .logo { width: 60px; }
             .showing-progress .selectors { grid-column: 1; grid-row: 2; }
-            .showing-progress .buttons { grid-column: 1; grid-row: 3; }
             .showing-progress .results { grid-column: 2; grid-row: 1 / 4; align-self: start; }
-            .showing-progress .results, .showing-progress .buttons { max-width: none; }
+            .showing-progress .results { max-width: none; }
             .showing-progress .hole-progress { display: block; max-width: none; }
             .showing-progress .hole-progress[hidden] { display: none; }
             .showing-progress .pace-gap { margin: 0; padding: 0; border: 0; }
@@ -638,7 +580,6 @@
             main.showing-progress .hole-progress { padding-top: 8px; margin-top: 10px; }
             .showing-progress .parameter { gap: 2px; }
             .showing-progress .parameter label { line-height: 1.2; }
-            .showing-progress .buttons button { min-height: 44px; padding: 10px 16px; }
             .showing-progress .current-hole strong { font-size: 18px; }
             .showing-progress .current-hole-title { font-size: 10px; }
             .showing-progress .pace-gap::before { inset: -4px -6px -4px; }
@@ -822,13 +763,11 @@
         .progress-dialog #pace-gap[data-timing="late"] #gap-time { font-size:28px; }
         @media (min-width:601px) and (max-height:500px) {
             body > main { grid-template-columns:minmax(0,350px); }
-            main .selectors, main .buttons, main .results, main .swipe-hint { grid-column:1; }
+            main .selectors, main .results, main .swipe-hint { grid-column:1; }
             main .selectors { grid-row:1; }
-            main .buttons { grid-row:3; }
-            main .results { grid-row:4; }
+            main .results { grid-row:2; }
             main.showing-progress .selectors { grid-row:1; }
-            main.showing-progress .buttons { grid-row:2; }
-            main.showing-progress .results { grid-row:1 / 4; }
+            main.showing-progress .results { grid-row:1; }
         }
     </style>
 </head>
@@ -932,24 +871,8 @@
         </div>
         <p id="swipe-hint" class="swipe-hint" hidden>Desliza para os lados ou toca nas setas</p>
 
-        <div class="buttons">
-            <button id="calculate-end-time" type="button" aria-label="Calcular tempo de término">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-                    <circle cx="12" cy="12" r="9" />
-                    <path d="M12 7v5l3 2" />
-                </svg>
-                Calcular
-            </button>
-            <button id="clear-result" type="button">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-                    <path d="M3 11a9 9 0 1 1 2.7 7M3 4v7h7" />
-                </svg>
-                Limpar
-            </button>
-        </div>
-
         <div class="results">
-            <div id="result"></div>
+            <div id="result" role="status"></div>
             <div id="time-difference" class="time-difference"></div>
             <div id="result-view-toggle" class="result-view-toggle" role="group" aria-label="Visualização do resultado" hidden>
                 <button type="button" data-result-view="table" aria-pressed="true" aria-controls="hole-times-table">Tabela</button>
@@ -1037,8 +960,6 @@
         const holeSelect = document.getElementById('hole');
         const resultDiv = document.getElementById('result');
         const timeDifferenceDiv = document.getElementById('time-difference');
-        const calculateButton = document.getElementById('calculate-end-time');
-        const clearButton = document.getElementById('clear-result');
         const menuToggle = document.getElementById('menu-toggle');
         const modeMenu = document.getElementById('mode-menu');
         const modeButtons = Array.from(document.querySelectorAll('.mode-option'));
@@ -1051,7 +972,6 @@
         const holeProgress = document.getElementById('hole-progress');
         let resultView = 'table';
         let calculation = null;
-        let resultTimer = null;
         const progressDialog = document.getElementById('progress-dialog');
         const progressExpand = document.getElementById('progress-expand');
         const landscapeButton = document.getElementById('progress-landscape');
@@ -1364,7 +1284,7 @@
         function resetCourse() {
             holeSelect.replaceChildren(...getHoleOrder().map(hole => new Option(String(hole), String(hole))));
             holeControl.refresh();
-            clearResult();
+            calculateEndTime();
         }
 
         shotgunStartSelect.addEventListener('change', () => {
@@ -1372,7 +1292,8 @@
             startingHole = Number(shotgunStartSelect.value);
             resetCourse();
         });
-        shotgunTimeInput.addEventListener('input', clearResult);
+        shotgunTimeInput.addEventListener('input', calculateEndTime);
+        shotgunTimeInput.addEventListener('change', calculateEndTime);
 
         function setMenuOpen(open, restoreFocus = false) {
             modeMenu.hidden = !open;
@@ -1463,6 +1384,10 @@
 
         function refreshResultClock(now = Date.now()) {
             if (!calculation) return;
+            if (calculation.day !== new Date(now).toDateString()) {
+                calculateEndTime();
+                return;
+            }
             const selected = calculation.schedule.find(segment => segment.hole === calculation.selectedHole);
             const timeDifference = now - selected.end;
             const absTimeDifference = Math.abs(timeDifference);
@@ -1516,11 +1441,15 @@
         }
 
         document.addEventListener('visibilitychange', () => {
-            if (!document.hidden) refreshResultClock();
+            if (!document.hidden) calculateEndTime();
         });
 
         function calculateEndTime() {
-            if (currentMode === 'shotgun' && !shotgunTimeInput.reportValidity()) return;
+            if (currentMode === 'shotgun' && !shotgunTimeInput.validity.valid) {
+                showInvalidTime();
+                return;
+            }
+            resultDiv.textContent = '';
             const teeTime = currentMode === 'shotgun' ? shotgunTimeInput.value : teeTimeSelect.value;
             const hole = parseInt(holeSelect.value);
 
@@ -1563,18 +1492,14 @@
                 tbody.appendChild(row);
             });
 
-            calculation = { schedule, selectedHole: hole };
-            clearInterval(resultTimer);
+            calculation = { schedule, selectedHole: hole, day: teeTimeDate.toDateString() };
             refreshResultClock();
             applyResultView();
-            resultTimer = setInterval(refreshResultClock, 1000);
         }
 
-        function clearResult() {
-            clearInterval(resultTimer);
-            resultTimer = null;
+        function showInvalidTime() {
             calculation = null;
-            resultDiv.textContent = '';
+            resultDiv.textContent = 'Indica uma hora de partida válida.';
             timeDifferenceDiv.textContent = '';
             timeDifferenceDiv.classList.remove('red', 'on-time');
             const holeTimesTable = document.getElementById('hole-times-table');
@@ -1583,8 +1508,10 @@
             applyResultView();
         }
 
-        calculateButton.addEventListener('click', calculateEndTime);
-        clearButton.addEventListener('click', clearResult);
+        teeTimeSelect.addEventListener('change', calculateEndTime);
+        holeSelect.addEventListener('change', calculateEndTime);
+        calculateEndTime();
+        setInterval(refreshResultClock, 1000);
     </script>
 </body>
 </html>
