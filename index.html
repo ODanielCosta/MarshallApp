@@ -2,7 +2,16 @@
 <html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#345326">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Marshall">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+    <link rel="stylesheet" href="pwa.css">
+    <script src="pwa.js" defer></script>
     <title>MARSHALL 0.1</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -816,6 +825,10 @@
                     <span class="mode-check" aria-hidden="true">✓</span>
                     <span><strong>Shotgun</strong><small>Hora e buraco de partida à escolha</small></span>
                 </button>
+                <button id="install-app" type="button" class="pwa-menu-action" hidden>
+                    <span aria-hidden="true">↓</span>
+                    <span><strong>Instalar app</strong><small>Adicionar ao ecrã principal</small></span>
+                </button>
             </nav>
         </header>
 
@@ -951,6 +964,18 @@
         <div id="progress-dialog-panel"></div>
     </dialog>
     
+    <aside id="app-status" class="pwa-status" aria-label="Estado da app" hidden>
+        <span id="app-status-message" role="status" aria-live="polite"></span>
+        <button id="update-app" type="button" hidden>Atualizar agora</button>
+        <button id="retry-offline" type="button" hidden>Preparar acesso offline</button>
+    </aside>
+    <dialog id="install-dialog" class="pwa-dialog" aria-labelledby="install-title" aria-describedby="install-instructions">
+        <h2 id="install-title">Instalar Marshall</h2>
+        <p id="install-instructions"></p>
+        <p>Depois da primeira visita com internet, a app fica disponível também sem rede.</p>
+        <form method="dialog"><button type="submit" autofocus>Fechar</button></form>
+    </dialog>
+
     <script>
         const teeTimeSelect = document.getElementById('tee-time');
         const holeSelect = document.getElementById('hole');
