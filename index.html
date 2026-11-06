@@ -392,8 +392,6 @@
         .gap-heading strong { font-size: 13px; }
         .gap-status { display: inline-flex; align-items: center; justify-content: flex-end; gap: 4px; padding-right: 14px; }
         .gap-heading .gap-status strong { font-size: 12px; }
-        .pace-status { padding: 2px 5px; border-radius: 6px; background: #842c2c; color: white; font-size: 11px; font-weight: 600; line-height: 1.2; text-transform: uppercase; }
-        .pace-status[hidden] { display: none; }
         .current-hole { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; }
         .current-hole-title {
             padding: 3px 8px;
@@ -604,7 +602,6 @@
             .showing-progress .current-hole-title { padding: 2px 6px; font-size: 10.5px; line-height: 1.2; }
             .showing-progress .progress-summary { padding-right: 20px; }
             .showing-progress .gap-status { flex-wrap: nowrap; gap: 3px; }
-            .showing-progress .pace-status { padding: 2px 4px; font-size: 10px; }
             .showing-progress .gap-status #gap-time { font-size: 11px; }
         }
         html.progress-dialog-open, html.progress-dialog-open body { overflow: hidden; }
@@ -662,7 +659,6 @@
         .progress-dialog .pace-gap { margin-top: 0; padding-top: 0; }
         .progress-dialog .ideal-progress { margin-top: 16px; padding-top: 12px; }
         .progress-dialog .gap-status { padding-right: 0; }
-        .progress-dialog .pace-status { padding: 3px 8px; font-size: 13px; }
         .progress-dialog .gap-heading { font-size: 13px; }
         .progress-dialog .gap-heading strong { font-size: 18px; }
         .progress-dialog .gap-heading { flex-wrap: wrap; }
@@ -759,7 +755,7 @@
         #pace-gap .gap-heading { flex-wrap:wrap; align-items:center; gap:10px; }
         #pace-gap .gap-status { flex-wrap:wrap; margin-left:auto; padding-right:0; gap:6px; }
         #pace-gap[data-timing="late"] .gap-status { flex-direction:column; align-items:flex-end; }
-        #pace-gap[data-timing="late"] #gap-time { font-size:22px; font-weight:600; line-height:1.25; color:#842020; font-variant-numeric:tabular-nums; }
+        #pace-gap[data-timing="late"] #gap-time { font-size:22px; font-weight:700; line-height:1.25; color:#842020; font-variant-numeric:tabular-nums; }
         .progress-dialog #pace-gap[data-timing="late"] #gap-time { font-size:28px; }
         @media (min-width:601px) and (max-height:500px) {
             body > main { grid-template-columns:minmax(0,350px); }
@@ -894,7 +890,7 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5" /></svg>
                 </button>
                 <div id="pace-gap" class="pace-gap">
-                    <div class="gap-heading"><div class="current-hole"><span class="current-hole-title">Buraco atual</span><strong id="progress-current-hole"></strong></div><div class="gap-status"><span id="pace-status" class="pace-status" hidden>Atrasado</span><strong id="gap-time"></strong></div></div>
+                    <div class="gap-heading"><div class="current-hole"><span class="current-hole-title">Buraco atual</span><strong id="progress-current-hole"></strong></div><div class="gap-status"><strong id="gap-time"></strong></div></div>
                     <div id="gap-track" class="gap-track" role="img" aria-label="Diferença para a posição prevista">
                         <div id="gap-fill" class="gap-fill"></div>
                         <span id="gap-player" class="gap-marker player" aria-hidden="true"><svg viewBox="0 0 40 48"><use href="#icon-golf-player" /></svg></span>
@@ -1419,13 +1415,12 @@
             document.getElementById('progress-end').textContent = `${progress.state === 'waiting' ? 'Partida' : 'Término'}: ${formatTime(progress.state === 'waiting' ? progress.start : progress.end)}`;
 
             const gap = getPaceGap(calculation.schedule, calculation.selectedHole, now);
-            const gapMinutes = Math.floor(Math.abs(gap.milliseconds) / 60000);
+            const gapMinutes = Math.floor((isLate ? absTimeDifference : Math.abs(gap.milliseconds)) / 60000);
             const durationLabel = gapMinutes === 0 ? '<1 min' : gapMinutes >= 60 ? `${Math.floor(gapMinutes / 60)}h ${gapMinutes % 60}m` : `${gapMinutes} min`;
-            const gapText = gap.waiting ? 'Aguardar partida' : gap.milliseconds > 0 ? `Faltam ${durationLabel}`
+            const gapText = gap.waiting ? 'Aguardar partida' : isLate ? `Atrasado ${durationLabel}`
                 : gap.milliseconds < 0 ? `${durationLabel} de avanço` : 'Em linha';
             document.getElementById('pace-gap').dataset.state = gap.waiting ? 'waiting' : gap.milliseconds > 0 ? 'behind' : gap.milliseconds < 0 ? 'ahead' : 'on-time';
             document.getElementById('pace-gap').dataset.timing = isLate ? 'late' : 'on-time';
-            document.getElementById('pace-status').hidden = !isLate;
             document.getElementById('gap-time').textContent = gapText;
             document.getElementById('progress-current-hole').textContent = String(calculation.selectedHole);
             document.getElementById('gap-reference').textContent = `Fim do B${calculation.selectedHole}`;
