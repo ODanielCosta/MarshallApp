@@ -6,10 +6,10 @@
     margin-top: 6px;
     padding: 12px 10px;
     border: 0;
-    border-top: 1px solid #517c3840;
+    border-top: 1px solid #1e385940;
     border-radius: 0 0 12px 12px;
     background: transparent;
-    color: #345326;
+    color: var(--brand-navy);
     text-align: left;
     cursor: pointer;
     touch-action: manipulation;
@@ -17,8 +17,8 @@
 .pwa-menu-action > span:first-child { width: 18px; font-size: 22px; text-align: center; }
 .pwa-menu-action strong, .pwa-menu-action small { display: block; }
 .pwa-menu-action strong { font-size: 14px; font-weight: 600; }
-.pwa-menu-action small { margin-top: 3px; color: #526448; font-size: 11px; }
-.pwa-menu-action:hover { background: #e7efdf; }
+.pwa-menu-action small { margin-top: 3px; color: var(--app-muted); font-size: 11px; }
+.pwa-menu-action:hover { background: var(--app-soft); }
 .pwa-status {
     position: relative;
     z-index: 100;
@@ -26,19 +26,19 @@
     width: min(420px, calc(100% - 24px));
     margin: 8px 12px max(12px, env(safe-area-inset-bottom));
     padding: 10px 12px;
-    border: 1px solid #517c384d;
+    border: 1px solid #1e38594d;
     border-radius: 12px;
-    background: #f5f9f1;
-    color: #345326;
+    background: var(--app-surface);
+    color: var(--brand-navy);
     font-size: 12px;
 }
 .pwa-status button, .pwa-dialog button {
     min-height: 44px;
     padding: 8px 12px;
-    border: 1px solid #517c38;
+    border: 1px solid var(--brand-navy);
     border-radius: 10px;
     background: white;
-    color: #345326;
+    color: var(--brand-navy);
     cursor: pointer;
     touch-action: manipulation;
 }
@@ -48,24 +48,24 @@
     width: min(420px, calc(100% - 32px));
     max-height: calc(100dvh - 32px);
     padding: 24px;
-    border: 1px solid #517c3866;
+    border: 1px solid #1e385966;
     border-radius: 18px;
-    background: #f5f9f1;
-    color: #203514;
+    background: var(--app-surface);
+    color: var(--app-ink);
     font-size: 14px;
     overflow: auto;
 }
-.pwa-dialog::backdrop { background: #13220eb3; }
+.pwa-dialog::backdrop { background: #102037b3; }
 .pwa-dialog h2 { margin-top: 0; font-size: 20px; }
 .pwa-dialog form { text-align: right; }
 .pwa-menu-action:focus-visible, .pwa-status button:focus-visible, .pwa-dialog button:focus-visible {
-    outline: 3px solid #345326;
+    outline: 3px solid var(--brand-navy);
     outline-offset: 3px;
 }
 .pwa-menu-action[hidden], .pwa-status[hidden], .pwa-status button[hidden] { display: none; }
 /* Leave room for notches and the home indicator in the installed app. */
 @media (display-mode: standalone) {
-    html { background: #f5f9f1; }
+    html { background: var(--app-surface); }
     body main {
         padding-left: max(12px, env(safe-area-inset-left));
         padding-right: max(12px, env(safe-area-inset-right));

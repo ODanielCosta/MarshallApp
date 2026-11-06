@@ -26,6 +26,8 @@
             align-items: center;
             font-family: 'Poppins', sans-serif;
             font-size: 16px;
+            color: var(--app-ink);
+            background: var(--app-surface);
             height: 100%;
         }
         select, button{
@@ -67,10 +69,10 @@
         .app-header .logo { display: block; width: 120px; height: auto; }
         .active-mode {
             padding: 6px 10px;
-            border: 1px solid #517c3840;
+            border: 1px solid #1e385940;
             border-radius: 20px;
             background: #ffffffcc;
-            color: #345326;
+            color: var(--brand-navy);
             font-size: 12px;
             font-weight: 600;
             white-space: nowrap;
@@ -81,11 +83,11 @@
             flex: 0 0 44px;
             height: 44px;
             padding: 0;
-            border: 1px solid #517c38;
+            border: 1px solid var(--brand-navy);
             border-radius: 14px;
             background: #fffffff0;
-            color: #345326;
-            box-shadow: 0 3px 10px #20351414;
+            color: var(--brand-navy);
+            box-shadow: 0 3px 10px #1e385914;
             cursor: pointer;
             touch-action: manipulation;
         }
@@ -97,14 +99,14 @@
             box-sizing: border-box;
             width: min(290px, 100%);
             padding: 8px;
-            border: 1px solid #517c384d;
+            border: 1px solid #1e38594d;
             border-radius: 18px;
             background: #fffffffA;
-            box-shadow: 0 12px 32px #20351433;
+            box-shadow: 0 12px 32px #1e385933;
         }
         .mode-menu p {
             margin: 8px 10px;
-            color: #526448;
+            color: var(--app-muted);
             font-size: 12px;
         }
         .mode-option {
@@ -116,22 +118,22 @@
             border: 0;
             border-radius: 12px;
             background: transparent;
-            color: #345326;
+            color: var(--brand-navy);
             text-align: left;
             cursor: pointer;
             touch-action: manipulation;
         }
-        .mode-option[aria-pressed="true"] { background: #e7efdf; }
+        .mode-option[aria-pressed="true"] { background: var(--app-soft); }
         .mode-option strong, .mode-option small { display: block; }
         .mode-option strong { font-size: 14px; font-weight: 600; }
-        .mode-option small { margin-top: 3px; color: #526448; font-size: 11px; }
+        .mode-option small { margin-top: 3px; color: var(--app-muted); font-size: 11px; }
         .mode-check { width: 18px; opacity: 0; font-weight: 600; }
         .mode-option[aria-pressed="true"] .mode-check { opacity: 1; }
         .menu-toggle:focus-visible, .mode-option:focus-visible {
-            outline: 3px solid #345326;
+            outline: 3px solid var(--brand-navy);
             outline-offset: 3px;
         }
-        .menu-toggle[aria-expanded="true"], .mode-option:hover { background: #e7efdf; }
+        .menu-toggle[aria-expanded="true"], .mode-option:hover { background: var(--app-soft); }
         .menu-toggle, .mode-option { -webkit-tap-highlight-color: transparent; }
         .selectors {
             display: flex;
@@ -184,25 +186,25 @@
             min-width: 0;
             height: 60px;
             padding: 0 10px;
-            border: 1px solid #517c38;
+            border: 1px solid var(--brand-navy);
             border-radius: 14px;
             background: rgba(255, 255, 255, 0.94);
-            box-shadow: 0 3px 10px #20351414;
-            color: #203514;
+            box-shadow: 0 3px 10px #1e385914;
+            color: var(--app-ink);
             font: 600 20px 'Poppins', sans-serif;
             text-align: center;
             -webkit-appearance: none;
             appearance: none;
         }
         .shotgun-time input::-webkit-date-and-time-value { text-align: center; }
-        .shotgun-time input:focus-visible { outline: 3px solid #345326; outline-offset: 3px; }
+        .shotgun-time input:focus-visible { outline: 3px solid var(--brand-navy); outline-offset: 3px; }
         .swipe-selector {
             display: flex;
             align-items: center;
             background: rgba(255, 255, 255, 0.94);
-            border: 1px solid #517c38;
+            border: 1px solid var(--brand-navy);
             border-radius: 14px;
-            box-shadow: 0 3px 10px #20351414;
+            box-shadow: 0 3px 10px #1e385914;
             overflow: hidden;
         }
         .swipe-step {
@@ -211,17 +213,17 @@
             padding: 0;
             border: 0;
             background: transparent;
-            color: #345326;
+            color: var(--brand-navy);
             font-size: 28px;
             cursor: pointer;
             touch-action: manipulation;
         }
         .swipe-step:disabled {
-            color: #b5beb1;
+            color: #abb7c6;
             cursor: default;
         }
         .swipe-step:active:not(:disabled) {
-            background: #e3eddc;
+            background: #e1eaf6;
         }
         .swipe-value {
             display: grid;
@@ -232,14 +234,14 @@
             font-size: 22px;
             font-weight: 600;
             font-variant-numeric: tabular-nums;
-            color: #203514;
+            color: var(--app-ink);
             cursor: ew-resize;
             user-select: none;
             -webkit-user-select: none;
             touch-action: pan-y pinch-zoom;
         }
         .swipe-value:focus-visible, .swipe-step:focus-visible {
-            outline: 3px solid #345326;
+            outline: 3px solid var(--brand-navy);
             outline-offset: -4px;
             border-radius: 8px;
         }
@@ -247,7 +249,7 @@
             transition: transform 140ms ease-out;
         }
         .swipe-value.is-dragging {
-            background: #edf3e7;
+            background: var(--app-hover);
             cursor: grabbing;
         }
         .is-dragging .swipe-number {
@@ -259,7 +261,7 @@
         .swipe-hint {
             margin: 4px 12px 16px;
             font-size: 12px;
-            color: #28391f;
+            color: var(--app-muted);
             text-align: center;
         }
         .buttons {
@@ -277,7 +279,7 @@
             gap: 8px;
             min-height: 48px;
             padding: 12px 18px;
-            border: 1px solid #517c38;
+            border: 1px solid var(--brand-navy);
             border-radius: 14px;
             font-weight: 600;
             line-height: 1.2;
@@ -292,18 +294,18 @@
             flex-shrink: 0;
         }
         #calculate-end-time {
-            background: #345326;
-            border-color: #345326;
+            background: var(--brand-navy);
+            border-color: var(--brand-navy);
             color: #fff;
-            box-shadow: 0 3px 10px #20351426;
+            box-shadow: 0 3px 10px #1e385926;
         }
         #clear-result {
             background: rgba(255, 255, 255, 0.94);
-            color: #345326;
-            box-shadow: 0 3px 10px #20351414;
+            color: var(--brand-navy);
+            box-shadow: 0 3px 10px #1e385914;
         }
         .buttons button:focus-visible {
-            outline: 3px solid #345326;
+            outline: 3px solid var(--brand-navy);
             outline-offset: 3px;
         }
         .buttons button:active {
@@ -311,8 +313,8 @@
             box-shadow: none;
         }
         @media (hover: hover) {
-            #calculate-end-time:hover { background: #29451e; }
-            #clear-result:hover { background: #edf3e7; }
+            #calculate-end-time:hover { background: #142a45; }
+            #clear-result:hover { background: var(--app-hover); }
         }
         @media (prefers-reduced-motion: no-preference) {
             .buttons button { transition: background-color 140ms ease, box-shadow 140ms ease, transform 140ms ease; }
@@ -332,7 +334,7 @@
             gap: 4px;
             margin-top: 8px;
             padding: 3px;
-            border: 1px solid #517c384d;
+            border: 1px solid #1e38594d;
             border-radius: 14px;
             background: #ffffffe8;
         }
@@ -342,13 +344,13 @@
             border: 0;
             border-radius: 10px;
             background: transparent;
-            color: #345326;
+            color: var(--brand-navy);
             font-weight: 600;
             cursor: pointer;
             touch-action: manipulation;
         }
-        .result-view-toggle button[aria-pressed="true"] { background: #345326; color: white; }
-        .result-view-toggle button:focus-visible { outline: 3px solid #345326; outline-offset: 2px; }
+        .result-view-toggle button[aria-pressed="true"] { background: var(--brand-navy); color: white; }
+        .result-view-toggle button:focus-visible { outline: 3px solid var(--brand-navy); outline-offset: 2px; }
         .hole-progress {
             position: relative;
             isolation: isolate;
@@ -356,15 +358,15 @@
             width: 100%;
             margin-top: 8px;
             padding: 12px;
-            border: 1px solid #517c38;
+            border: 1px solid var(--brand-navy);
             border-radius: 14px;
             background: #fffffff0;
-            box-shadow: 0 3px 10px #20351414;
-            color: #203514;
+            box-shadow: 0 3px 10px #1e385914;
+            color: var(--app-ink);
             cursor: zoom-in;
         }
         main.showing-progress .hole-progress { padding-top: 8px; margin-top: 12px; }
-        .ideal-progress { position: relative; margin-top: 18px; padding-top: 8px; border-top: 1px solid #dce6d6; }
+        .ideal-progress { position: relative; margin-top: 18px; padding-top: 8px; border-top: 1px solid #d8e2ef; }
         .ideal-progress .progress-caption { position: static; display: table; width: fit-content; max-width: 100%; margin: 0 0 6px; white-space: normal; }
         .progress-expand {
             position: absolute;
@@ -379,12 +381,12 @@
             border: 0;
             border-radius: 10px;
             background: transparent;
-            color: #345326;
+            color: var(--brand-navy);
             cursor: zoom-in;
         }
-        .progress-expand::before { content: ''; position: absolute; inset: 8px; border: 1px solid #517c38; border-radius: 10px; background: #f8fcf5; box-shadow: 0 2px 6px #20351426; }
+        .progress-expand::before { content: ''; position: absolute; inset: 8px; border: 1px solid var(--brand-navy); border-radius: 10px; background: var(--app-surface); box-shadow: 0 2px 6px #1e385926; }
         .progress-expand svg { position: relative; z-index: 1; width: 16px; height: 16px; }
-        .progress-expand:focus-visible { outline: 3px solid #345326; outline-offset: 3px; }
+        .progress-expand:focus-visible { outline: 3px solid var(--brand-navy); outline-offset: 3px; }
         .result-view-toggle[hidden], .hole-progress[hidden] { display: none; }
         .progress-caption {
             position: absolute;
@@ -394,10 +396,10 @@
             max-width: calc(100% - 50px);
             margin: 0;
             padding: 3px 8px;
-            border: 1px solid #b6cba7;
+            border: 1px solid var(--app-border);
             border-radius: 8px;
-            background: #e5efde;
-            color: #263c1c;
+            background: var(--app-soft);
+            color: var(--brand-navy);
             font-size: 12px;
             font-weight: 600;
             line-height: 1.3;
@@ -408,18 +410,18 @@
         .progress-summary { display: flex; justify-content: space-between; align-items: center; gap: 8px; line-height: 1.2; }
         .progress-summary strong { font-size: 20px; }
         .progress-summary > span { font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; }
-        .expected-hole-number { display: inline-block; padding: 1px 6px; border-radius: 7px; background: #25451c; color: white; font: inherit; line-height: 1; font-variant-numeric: tabular-nums; }
+        .expected-hole-number { display: inline-block; padding: 1px 6px; border-radius: 7px; background: var(--brand-navy); color: white; font: inherit; line-height: 1; font-variant-numeric: tabular-nums; }
         .expected-hole-number[hidden] { display: none; }
-        .progress-track { height: 10px; margin: 10px 0 8px; border-radius: 10px; background: #e0e9da; overflow: hidden; }
-        .progress-fill { width: 0; height: 100%; border-radius: inherit; background: #517c38; }
+        .progress-track { height: 10px; margin: 10px 0 8px; border-radius: 10px; background: var(--app-track); overflow: hidden; }
+        .progress-fill { width: 0; height: 100%; border-radius: inherit; background: var(--brand-navy); }
         .progress-route { display: flex; align-items: center; gap: 8px; }
         .progress-route .progress-track { flex: 1; }
-        .golf-icon { width: 20px; height: 24px; flex: 0 0 20px; color: #345326; }
-        .progress-interval { display: flex; justify-content: space-between; gap: 8px; font-size: 11px; line-height: 1.3; color: #526448; }
+        .golf-icon { width: 20px; height: 24px; flex: 0 0 20px; color: var(--brand-navy); }
+        .progress-interval { display: flex; justify-content: space-between; gap: 8px; font-size: 11px; line-height: 1.3; color: var(--app-muted); }
         .pace-gap {
-            --pace-background: #dcefd5;
-            --pace-border: #96b985;
-            --pace-ink: #25451c;
+            --pace-background: var(--app-soft);
+            --pace-border: var(--app-border);
+            --pace-ink: var(--brand-navy);
             position: relative;
             isolation: isolate;
             margin-top: 0;
@@ -472,7 +474,7 @@
             height: 8px;
             margin: 8px 5px;
             border-radius: 8px;
-            background-color: #e9ddcc;
+            background-color: var(--app-track);
             background-image: repeating-linear-gradient(110deg, transparent 0 6px, #ffffff55 6px 10px, transparent 10px 16px);
             background-size: 16px 100%;
         }
@@ -481,7 +483,7 @@
             top: 0;
             height: 100%;
             border-radius: inherit;
-            background-color: #a26720;
+            background-color: #58799f;
             background-image: repeating-linear-gradient(110deg, transparent 0 6px, #ffffff66 6px 10px, transparent 10px 16px);
             background-size: 16px 100%;
         }
@@ -494,12 +496,12 @@
         }
         .gap-marker { position: absolute; top: 50%; width: 20px; height: 24px; transform: translate(-50%, -50%); }
         .gap-marker svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 0 1px white); }
-        .gap-marker.player { color: #263c1c; z-index: 2; }
+        .gap-marker.player { color: var(--brand-navy); z-index: 2; }
         .gap-marker.expected { color: #1e5ba8; z-index: 1; }
-        .gap-legend { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; font-size: 10px; line-height: 1.3; color: #526448; }
+        .gap-legend { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; font-size: 10px; line-height: 1.3; color: var(--app-muted); }
         .gap-scale { font-variant-numeric: tabular-nums; white-space: nowrap; }
         .gap-legend span { display: inline-flex; align-items: center; gap: 4px; }
-        .gap-legend svg { width: 12px; height: 12px; flex: 0 0 12px; color: #263c1c; }
+        .gap-legend svg { width: 12px; height: 12px; flex: 0 0 12px; color: var(--brand-navy); }
         .gap-legend span:last-child svg { color: #1e5ba8; }
         .icon-definitions { position: absolute; width: 0; height: 0; overflow: hidden; }
         .pace-gap #gap-time, .pace-gap .gap-legend { color: var(--pace-ink); }
@@ -508,8 +510,8 @@
             font-weight: bold;
             line-height: 1.4;
         }
-        .time-difference.green {
-            color: green;
+        .time-difference.on-time {
+            color: var(--brand-navy);
         }
         .time-difference.red {
             color: red;
@@ -520,7 +522,7 @@
             width: 100%;
         }
         table, th, td {
-            border: 1px solid black;
+            border: 1px solid var(--app-border);
         }
         th, td {
             padding: 8px;
@@ -528,7 +530,8 @@
             width: 100px; /* Ensure consistent width */
         }
         th{
-            background: #8bc34aab;
+            background: var(--brand-navy);
+            color: white;
         }
         td{
             background: rgba(255, 255, 255, 0.671);
@@ -672,17 +675,17 @@
             max-height: calc(100dvh - 24px);
             margin: auto;
             padding: 18px;
-            border: 1px solid #517c3866;
+            border: 1px solid #1e385966;
             border-radius: 22px;
-            background: #f5f9f1;
-            color: #203514;
+            background: var(--app-surface);
+            color: var(--app-ink);
             overflow: auto;
         }
-        .progress-dialog::backdrop { background: #13220ed1; backdrop-filter: blur(5px); }
+        .progress-dialog::backdrop { background: #102037d1; backdrop-filter: blur(5px); }
         .progress-dialog-header, .dialog-actions, .dialog-meta { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-        .progress-dialog-header { position: sticky; top: 0; z-index: 2; background: #f5f9f1; }
+        .progress-dialog-header { position: sticky; top: 0; z-index: 2; background: var(--app-surface); }
         .progress-dialog-header h2 { margin: 2px 0 0; font-size: 20px; line-height: 1.2; }
-        .dialog-mode { color: #526448; font-size: 11px; }
+        .dialog-mode { color: var(--app-muted); font-size: 11px; }
         .dialog-actions { flex-shrink: 0; gap: 6px; }
         .dialog-actions button {
             display: inline-flex;
@@ -691,10 +694,10 @@
             gap: 6px;
             min-height: 44px;
             padding: 8px 12px;
-            border: 1px solid #517c38;
+            border: 1px solid var(--brand-navy);
             border-radius: 12px;
             background: white;
-            color: #345326;
+            color: var(--brand-navy);
             font-size: 12px;
             font-weight: 600;
             cursor: pointer;
@@ -702,9 +705,9 @@
         }
         .dialog-actions #progress-dialog-close { width: 44px; padding: 0; }
         .dialog-actions svg { width: 20px; height: 20px; }
-        .dialog-actions button:focus-visible { outline: 3px solid #345326; outline-offset: 3px; }
+        .dialog-actions button:focus-visible { outline: 3px solid var(--brand-navy); outline-offset: 3px; }
         .dialog-meta { flex-wrap: wrap; margin: 10px 0; }
-        .dialog-meta p { margin: 0; font-size: 12px; color: #526448; }
+        .dialog-meta p { margin: 0; font-size: 12px; color: var(--app-muted); }
         .progress-dialog .hole-progress { max-width: none; margin: 0; padding: 20px; cursor: default; box-shadow: none; }
         .progress-dialog .progress-expand { display: none; }
         .progress-dialog .progress-caption { position: static; display: table; max-width: none; padding: 5px 10px; font-size: 14px; margin-bottom: 8px; white-space: normal; overflow: visible; }
@@ -753,7 +756,17 @@
             .progress-dialog .gap-marker.player { width: 28px; height: 34px; }
         }
         /* Keep the compact bar above the content, including on notched screens. */
-        :root { --app-header-height:56px; --brand-navy:#1e3859; }
+        :root {
+            --app-header-height:56px;
+            --brand-navy:#1e3859;
+            --app-ink:#182b43;
+            --app-muted:#52657c;
+            --app-border:#8da4bf;
+            --app-surface:#f4f7fb;
+            --app-soft:#e5edf7;
+            --app-hover:#edf3fa;
+            --app-track:#dbe5f2;
+        }
         body > main, body > main.showing-progress {
             padding-top:calc(var(--app-header-height) + env(safe-area-inset-top) + 12px);
         }
@@ -1458,9 +1471,9 @@
             const isLate = timeDifference > 0;
             timeDifferenceDiv.innerHTML = `${isLate ? 'Atrasado: +' : 'A horas: -'} <span>${hoursDifference}h${minutesDifference}m</span>`;
             timeDifferenceDiv.classList.toggle('red', isLate);
-            timeDifferenceDiv.classList.toggle('green', !isLate);
+            timeDifferenceDiv.classList.toggle('on-time', !isLate);
             const selectedCell = document.querySelector('[data-selected-hole-time]');
-            if (selectedCell) selectedCell.style.color = isLate ? 'red' : 'green';
+            if (selectedCell) selectedCell.style.color = isLate ? 'red' : 'var(--brand-navy)';
 
             const progress = getExpectedProgress(calculation.schedule, now);
             const percentage = Math.floor(progress.percentage);
@@ -1563,7 +1576,7 @@
             calculation = null;
             resultDiv.textContent = '';
             timeDifferenceDiv.textContent = '';
-            timeDifferenceDiv.classList.remove('red', 'green');
+            timeDifferenceDiv.classList.remove('red', 'on-time');
             const holeTimesTable = document.getElementById('hole-times-table');
             holeTimesTable.style.display = 'none';
             holeTimesTable.querySelector('tbody').innerHTML = '';
