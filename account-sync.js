@@ -97,7 +97,11 @@
       delay.textContent = `Atrasado ${formatPaceDuration(record.delay_seconds)}`;
       const details = document.createElement('p');
       const buggy = record.buggy_number ? `Buggy ${record.buggy_number} · ` : '';
-      details.textContent = `${buggy}${record.warned ? 'Grupo avisado' : 'Por avisar'} · Registado às ${observationTime.format(new Date(record.recorded_at))}`;
+      const status = document.createElement('span');
+      status.className = 'record-warning-status';
+      status.dataset.warned = String(record.warned);
+      status.textContent = record.warned ? 'Grupo avisado' : 'Por avisar';
+      details.append(buggy, status, ` · Registado às ${observationTime.format(new Date(record.recorded_at))}`);
       card.append(heading, delay, details);
       if (record.notes) {
         const notes = document.createElement('p');

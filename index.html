@@ -804,6 +804,11 @@
         .record-list li { padding:12px; border:1px solid var(--app-border); border-radius:12px; background:white; }
         .record-list .record-notes { white-space:pre-wrap; }
         .record-late { color:#842020; font-weight:700; }
+        .record-warning-status {
+            text-decoration:underline #b42318 2px;
+            text-underline-offset:3px;
+        }
+        .record-warning-status[data-warned="true"] { text-decoration-color:#18743b; }
         #records-open { margin-top:8px; border-top:1px solid var(--app-border); }
         @media (min-width:601px) and (max-height:500px) {
             body > main { grid-template-columns:minmax(0,350px); }
