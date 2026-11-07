@@ -757,6 +757,54 @@
         #pace-gap[data-timing="late"] .gap-status { flex-direction:column; align-items:flex-end; }
         #pace-gap[data-timing="late"] #gap-time { font-size:22px; font-weight:700; line-height:1.25; color:#842020; font-variant-numeric:tabular-nums; }
         .progress-dialog #pace-gap[data-timing="late"] #gap-time { font-size:28px; }
+        .record-action {
+            min-height:44px;
+            margin-top:8px;
+            padding:8px 12px;
+            border:1px solid var(--brand-navy);
+            border-radius:10px;
+            background:var(--brand-navy);
+            color:white;
+            font-weight:600;
+            cursor:pointer;
+        }
+        .showing-progress #record-delay-table { display:none; }
+        .record-dialog {
+            box-sizing:border-box;
+            width:min(100% - 24px, 470px);
+            max-height:calc(100dvh - 24px);
+            padding:16px;
+            border:1px solid var(--app-border);
+            border-radius:16px;
+            background:var(--app-surface);
+            color:var(--app-ink);
+            overflow:auto;
+        }
+        .record-dialog::backdrop { background:#102037bf; }
+        .record-dialog h2 { margin:0; font-size:20px; }
+        .record-dialog header, .record-actions { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+        .record-dialog button { min-height:44px; padding:8px 12px; cursor:pointer; }
+        .record-dialog button:disabled { opacity:.55; cursor:default; }
+        .record-form { display:grid; gap:12px; }
+        .record-form label { display:grid; gap:4px; font-size:14px; }
+        .record-form label.record-warned { display:flex; align-items:center; min-height:44px; }
+        .record-form input[type="text"], .record-form textarea {
+            box-sizing:border-box;
+            width:100%;
+            padding:10px;
+            border:1px solid var(--app-border);
+            border-radius:8px;
+            color:inherit;
+            font:inherit;
+            font-size:16px;
+        }
+        .record-form textarea { resize:vertical; }
+        .record-dialog p { margin:8px 0; font-size:14px; overflow-wrap:anywhere; }
+        .record-list { display:grid; gap:8px; list-style:none; padding:0; margin:8px 0 0; }
+        .record-list li { padding:12px; border:1px solid var(--app-border); border-radius:12px; background:white; }
+        .record-list .record-notes { white-space:pre-wrap; }
+        .record-late { color:#842020; font-weight:700; }
+        #records-open { margin-top:8px; border-top:1px solid var(--app-border); }
         @media (min-width:601px) and (max-height:500px) {
             body > main { grid-template-columns:minmax(0,350px); }
             main .selectors, main .results, main .swipe-hint { grid-column:1; }
@@ -870,6 +918,7 @@
         <div class="results">
             <div id="result" role="status"></div>
             <div id="time-difference" class="time-difference"></div>
+            <button id="record-delay-table" class="record-action" type="button" data-record-delay hidden>Registar atraso</button>
             <div id="result-view-toggle" class="result-view-toggle" role="group" aria-label="Visualização do resultado" hidden>
                 <button type="button" data-result-view="table" aria-pressed="true" aria-controls="hole-times-table">Tabela</button>
                 <button type="button" data-result-view="progress" aria-pressed="false" aria-controls="hole-progress">Progresso</button>
@@ -897,6 +946,7 @@
                         <span id="gap-expected" class="gap-marker expected" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#icon-finish-flag" /></svg></span>
                     </div>
                     <div class="gap-legend"><span><svg viewBox="0 0 40 48" aria-hidden="true"><use href="#icon-golf-player" /></svg><span id="gap-reference"></span></span><span id="gap-scale" class="gap-scale"></span><span><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-finish-flag" /></svg><span id="gap-expected-label">Previsto</span></span></div>
+                    <button class="record-action" type="button" data-record-delay hidden>Registar atraso</button>
                 </div>
                 <div class="ideal-progress">
                 <p id="progress-caption" class="progress-caption">Onde deveria estar agora</p>
@@ -938,6 +988,22 @@
         <div class="dialog-meta"><p id="progress-dialog-context"></p></div>
         <div id="progress-dialog-panel"></div>
     </dialog>
+    <dialog id="records-dialog" class="record-dialog" aria-labelledby="records-title">
+        <header><h2 id="records-title">Registos de hoje</h2><button type="button" id="records-close">Fechar</button></header>
+        <p id="records-status" role="status"></p>
+        <ul id="records-list" class="record-list"></ul>
+    </dialog>
+    <dialog id="record-dialog" class="record-dialog" aria-labelledby="record-title">
+        <h2 id="record-title">Registar atraso</h2>
+        <p id="record-context"></p>
+        <form id="record-form" class="record-form">
+            <label>Número do buggy (opcional)<input id="record-buggy" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="12"></label>
+            <label class="record-warned"><input id="record-warned" type="checkbox">Grupo já avisado</label>
+            <label>Notas para o próximo marshal<textarea id="record-notes" rows="3" maxlength="1000"></textarea></label>
+            <div class="record-actions"><button id="record-cancel" type="button">Cancelar</button><button id="record-save" class="record-action" type="submit">Guardar registo</button></div>
+            <p id="record-status" role="status"></p>
+        </form>
+    </dialog>
     
     <aside id="app-status" class="pwa-status" aria-label="Estado da app" hidden>
         <span id="app-status-message" role="status" aria-live="polite"></span>
@@ -968,6 +1034,11 @@
         const holeProgress = document.getElementById('hole-progress');
         let resultView = 'table';
         let calculation = null;
+        const recordButtons = document.querySelectorAll('[data-record-delay]');
+        const courseClockFormatter = new Intl.DateTimeFormat('en-GB', {
+            timeZone: 'Europe/Lisbon', year: 'numeric', month: '2-digit', day: '2-digit',
+            hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23'
+        });
         const progressDialog = document.getElementById('progress-dialog');
         const progressExpand = document.getElementById('progress-expand');
         const landscapeButton = document.getElementById('progress-landscape');
@@ -988,8 +1059,7 @@
             holeProgress.before(progressPlaceholder);
             document.getElementById('progress-dialog-panel').append(holeProgress);
             document.getElementById('progress-dialog-mode').textContent = document.getElementById('active-mode').textContent;
-            const start = new Date(calculation.schedule[0].start).toTimeString().slice(0, 5);
-            document.getElementById('progress-dialog-context').textContent = `Partida ${start} · Fim do buraco ${calculation.selectedHole}`;
+            document.getElementById('progress-dialog-context').textContent = `Partida ${calculation.teeTime} · Fim do buraco ${calculation.selectedHole}`;
             document.documentElement.classList.add('progress-dialog-open');
             progressExpand.setAttribute('aria-expanded', 'true');
             progressDialog.showModal();
@@ -1354,7 +1424,6 @@
 
         function getPaceGap(schedule, selectedHole, now) {
             const start = schedule[0].start;
-            const finish = schedule[schedule.length - 1].end;
             const player = schedule.find(segment => segment.hole === selectedHole).end;
             const frontNine = selectedHole <= 9;
             const firstHole = frontNine ? 1 : 10;
@@ -1366,39 +1435,70 @@
             const scaleEnd = scaleStart + scaleMinutes * 60000;
             const scale = { scaleStartHole: frontNine ? 1 : 9, scaleEndHole: lastHole, scaleMinutes };
             if (now < start) return { ...scale, milliseconds: 0, playerPercent: 0, expectedPercent: 0, waiting: true, expectedOffscale: null };
-            const expected = Math.max(start, Math.min(finish, now));
             const toPercent = timestamp => Math.max(0, Math.min(100, (timestamp - scaleStart) / (scaleEnd - scaleStart) * 100));
             return {
                 ...scale,
-                milliseconds: expected - player,
+                milliseconds: now - player,
                 playerPercent: toPercent(player),
-                expectedPercent: toPercent(expected),
+                expectedPercent: toPercent(now),
                 waiting: false,
-                expectedOffscale: expected < scaleStart ? 'before' : expected > scaleEnd ? 'after' : null
+                expectedOffscale: now < scaleStart ? 'before' : now > scaleEnd ? 'after' : null
             };
         }
 
-        function refreshResultClock(now = Date.now()) {
+        // Compare the course's local times even when the device uses another time zone.
+        function getCourseClock(timestamp = Date.now()) {
+            const parts = Object.fromEntries(courseClockFormatter.formatToParts(timestamp).map(({ type, value }) => [type, value]));
+            const day = `${parts.year}-${parts.month}-${parts.day}`;
+            const time = Date.parse(`${day}T${parts.hour}:${parts.minute}:${parts.second}Z`) + timestamp % 1000;
+            return { day, time };
+        }
+
+        function formatPaceDuration(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            if (minutes < 1) return '<1 min';
+            if (minutes < 60) return `${minutes} min`;
+            return `${Math.floor(minutes / 60)}h ${minutes % 60}m`;
+        }
+
+        function getDelayObservation() {
+            const clock = getCourseClock();
+            if (calculation?.day !== clock.day) return null;
+            const delay = clock.time - calculation.selectedEnd;
+            if (delay <= 0) return null;
+            return {
+                day: clock.day,
+                mode: calculation.mode,
+                start_hole: calculation.schedule[0].hole,
+                tee_time: calculation.teeTime,
+                hole: calculation.selectedHole,
+                delay_seconds: Math.max(1, Math.floor(delay / 1000))
+            };
+        }
+
+        const formatTime = timestamp => new Date(timestamp).toISOString().slice(11, 16);
+
+        function refreshResultClock(timestamp = Date.now()) {
             if (!calculation) return;
-            if (calculation.day !== new Date(now).toDateString()) {
+            const { day, time: now } = getCourseClock(timestamp);
+            if (calculation.day !== day) {
                 calculateEndTime();
                 return;
             }
-            const selected = calculation.schedule.find(segment => segment.hole === calculation.selectedHole);
-            const timeDifference = now - selected.end;
-            const absTimeDifference = Math.abs(timeDifference);
-            const hoursDifference = Math.floor(absTimeDifference / 3600000);
-            const minutesDifference = Math.floor(absTimeDifference % 3600000 / 60000);
+            const timeDifference = now - calculation.selectedEnd;
+            const durationLabel = formatPaceDuration(Math.abs(timeDifference) / 1000);
             const isLate = timeDifference > 0;
-            timeDifferenceDiv.innerHTML = `${isLate ? 'Atrasado: +' : 'A horas: -'} <span>${hoursDifference}h${minutesDifference}m</span>`;
+            const progress = getExpectedProgress(calculation.schedule, now);
+            const lateLabel = `Atrasado ${durationLabel}`;
+            timeDifferenceDiv.textContent = isLate ? lateLabel : progress.state === 'waiting' ? 'Aguardar partida'
+                : timeDifference < 0 ? `Faltam ${durationLabel}` : 'Em linha';
             timeDifferenceDiv.classList.toggle('red', isLate);
             timeDifferenceDiv.classList.toggle('on-time', !isLate);
+            recordButtons.forEach(button => { button.hidden = !isLate; });
             const selectedCell = document.querySelector('[data-selected-hole-time]');
             if (selectedCell) selectedCell.style.color = isLate ? 'red' : 'var(--brand-navy)';
 
-            const progress = getExpectedProgress(calculation.schedule, now);
             const percentage = Math.floor(progress.percentage);
-            const formatTime = timestamp => new Date(timestamp).toTimeString().slice(0, 5);
             document.getElementById('progress-caption').textContent = progress.state === 'waiting' ? 'Ainda não começou'
                 : progress.state === 'complete' ? 'A volta já deveria estar concluída' : 'Onde deveria estar agora';
             document.getElementById('progress-hole-prefix').textContent = progress.state === 'complete' ? 'Volta concluída' : 'Buraco ';
@@ -1415,9 +1515,7 @@
             document.getElementById('progress-end').textContent = `${progress.state === 'waiting' ? 'Partida' : 'Término'}: ${formatTime(progress.state === 'waiting' ? progress.start : progress.end)}`;
 
             const gap = getPaceGap(calculation.schedule, calculation.selectedHole, now);
-            const gapMinutes = Math.floor((isLate ? absTimeDifference : Math.abs(gap.milliseconds)) / 60000);
-            const durationLabel = gapMinutes === 0 ? '<1 min' : gapMinutes >= 60 ? `${Math.floor(gapMinutes / 60)}h ${gapMinutes % 60}m` : `${gapMinutes} min`;
-            const gapText = gap.waiting ? 'Aguardar partida' : isLate ? `Atrasado ${durationLabel}`
+            const gapText = gap.waiting ? 'Aguardar partida' : isLate ? lateLabel
                 : gap.milliseconds < 0 ? `${durationLabel} de avanço` : 'Em linha';
             document.getElementById('pace-gap').dataset.state = gap.waiting ? 'waiting' : gap.milliseconds > 0 ? 'behind' : gap.milliseconds < 0 ? 'ahead' : 'on-time';
             document.getElementById('pace-gap').dataset.timing = isLate ? 'late' : 'on-time';
@@ -1448,16 +1546,15 @@
             const teeTime = currentMode === 'shotgun' ? shotgunTimeInput.value : teeTimeSelect.value;
             const hole = parseInt(holeSelect.value);
 
-            const [hour, minute] = teeTime.split(':').map(Number);
-            const teeTimeDate = new Date();
-            teeTimeDate.setHours(hour, minute, 0, 0);
+            const timestamp = Date.now();
+            const { day } = getCourseClock(timestamp);
 
             const holeTimesTable = document.getElementById('hole-times-table');
             const tbody = holeTimesTable.querySelector('tbody');
             tbody.innerHTML = ''; // Clear previous results
 
             const holeOrder = getHoleOrder();
-            let nextStart = teeTimeDate.getTime();
+            let nextStart = Date.parse(`${day}T${teeTime}:00Z`);
             const schedule = holeOrder.map(holeNumber => {
                 const segment = { hole: holeNumber, start: nextStart, end: nextStart + holeTimes[holeNumber - 1] * 60000 };
                 nextStart = segment.end;
@@ -1468,8 +1565,7 @@
 
             holesToShow.forEach(segment => {
                 const h = segment.hole;
-                const endTimeDate = new Date(segment.end);
-                const endTime = endTimeDate.toTimeString().slice(0, 5);
+                const endTime = formatTime(segment.end);
 
                 const row = document.createElement('tr');
                 const holeCell = document.createElement('td');
@@ -1487,8 +1583,8 @@
                 tbody.appendChild(row);
             });
 
-            calculation = { schedule, selectedHole: hole, day: teeTimeDate.toDateString() };
-            refreshResultClock();
+            calculation = { schedule, selectedHole: hole, selectedEnd: schedule[selectedIndex].end, day, teeTime, mode: currentMode };
+            refreshResultClock(timestamp);
             applyResultView();
         }
 
@@ -1497,6 +1593,7 @@
             resultDiv.textContent = 'Indica uma hora de partida válida.';
             timeDifferenceDiv.textContent = '';
             timeDifferenceDiv.classList.remove('red', 'on-time');
+            recordButtons.forEach(button => { button.hidden = true; });
             const holeTimesTable = document.getElementById('hole-times-table');
             holeTimesTable.style.display = 'none';
             holeTimesTable.querySelector('tbody').innerHTML = '';
