@@ -1,7 +1,7 @@
 'use strict';
 
 // Change this revision when changing any app-shell file so existing installs update.
-const CACHE_NAME = 'marshall-shell-v10';
+const CACHE_NAME = 'marshall-shell-v11';
 const CACHE_PREFIX = 'marshall-shell-';
 const SHELL_PATHS = [
     './', './index.html', './pwa.js', './pwa.css', './account-sync.js', './manifest.webmanifest',

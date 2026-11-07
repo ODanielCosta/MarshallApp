@@ -800,15 +800,22 @@
         }
         .record-form textarea { resize:vertical; }
         .record-dialog p { margin:8px 0; font-size:14px; overflow-wrap:anywhere; }
-        .record-list { display:grid; gap:8px; list-style:none; padding:0; margin:8px 0 0; }
-        .record-list li { padding:12px; border:1px solid var(--app-border); border-radius:12px; background:white; }
-        .record-list .record-notes { white-space:pre-wrap; }
-        .record-late { color:#842020; font-weight:700; }
-        .record-warning-status {
-            text-decoration:underline #b42318 2px;
-            text-underline-offset:3px;
-        }
+        .record-list { display:grid; gap:12px; list-style:none; padding:0; margin:8px 0 0; }
+        .record-list > li { display:grid; gap:12px; padding:14px; border:1px solid var(--app-border); border-radius:12px; background:white; }
+        .record-summary { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+        .record-label { display:block; color:var(--app-muted); font-size:12px; font-weight:600; line-height:1.4; }
+        .record-tee-time { display:block; color:var(--brand-navy); font-size:25px; line-height:1.2; font-variant-numeric:tabular-nums; }
+        .record-late { padding:5px 8px; border-radius:8px; background:#fbe8e8; color:#842020; font-size:14px; }
+        .record-fields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin:0; }
+        .record-fields > div, .record-notes { padding:8px 10px; border-radius:8px; background:var(--app-surface); }
+        .record-fields dd { margin:2px 0 0; font-size:15px; font-weight:600; overflow-wrap:anywhere; }
+        .record-warning { display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 10px; font-size:14px; }
+        .record-warning-status { text-decoration:underline #b42318 2px; text-underline-offset:3px; }
         .record-warning-status[data-warned="true"] { text-decoration-color:#18743b; }
+        .record-notes p { margin:4px 0 0; white-space:pre-wrap; }
+        .record-list .record-actions { flex-wrap:wrap; padding-top:10px; border-top:1px solid var(--app-soft); }
+        .record-list .record-actions button { border:1px solid var(--app-border); border-radius:8px; background:white; color:var(--brand-navy); font-weight:600; }
+        .record-list .record-actions .record-delete { border-color:#e4b6b6; color:#842020; }
         #records-open { margin-top:8px; border-top:1px solid var(--app-border); }
         @media (min-width:601px) and (max-height:500px) {
             body > main { grid-template-columns:minmax(0,350px); }

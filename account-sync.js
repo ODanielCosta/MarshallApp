@@ -78,9 +78,12 @@
     $('account-email').focus();
   }
 
+  function recordRoute(record) {
+    return record.mode === 'shotgun' ? `Shotgun B${record.start_hole}` : `T${record.start_hole}`;
+  }
+
   function describeRecord(record) {
-    const route = record.mode === 'shotgun' ? `Shotgun B${record.start_hole}` : `T${record.start_hole}`;
-    return `${record.tee_time.slice(0, 5)} · ${route} · Buraco ${record.hole}`;
+    return `${record.tee_time.slice(0, 5)} · ${recordRoute(record)} · Buraco ${record.hole}`;
   }
 
   function renderRecords(records) {
@@ -90,31 +93,71 @@
     recordsList.replaceChildren();
     for (const record of records) {
       const card = document.createElement('li');
-      const heading = document.createElement('strong');
-      heading.textContent = describeRecord(record);
-      const delay = document.createElement('p');
+      const summary = document.createElement('div');
+      summary.className = 'record-summary';
+      const heading = document.createElement('div');
+      const teeLabel = document.createElement('span');
+      teeLabel.className = 'record-label';
+      teeLabel.textContent = 'Tee time';
+      const teeTime = document.createElement('strong');
+      teeTime.className = 'record-tee-time';
+      teeTime.textContent = record.tee_time.slice(0, 5);
+      heading.append(teeLabel, teeTime);
+      const delay = document.createElement('strong');
       delay.className = 'record-late';
       delay.textContent = `Atrasado ${formatPaceDuration(record.delay_seconds)}`;
-      const details = document.createElement('p');
-      const buggy = record.buggy_number ? `Buggy ${record.buggy_number} · ` : '';
-      const status = document.createElement('span');
+      summary.append(heading, delay);
+
+      const details = document.createElement('dl');
+      details.className = 'record-fields';
+      const fields = [
+        ['Buraco', record.hole],
+        ['Buggy', record.buggy_number || 'Não indicado'],
+        ['Saída', recordRoute(record)],
+        ['Registado às', observationTime.format(new Date(record.recorded_at))]
+      ];
+      for (const [label, value] of fields) {
+        const field = document.createElement('div');
+        const term = document.createElement('dt');
+        term.className = 'record-label';
+        term.textContent = label;
+        const description = document.createElement('dd');
+        description.textContent = value;
+        field.append(term, description);
+        details.append(field);
+      }
+
+      const warning = document.createElement('div');
+      warning.className = 'record-warning';
+      const warningLabel = document.createElement('span');
+      warningLabel.className = 'record-label';
+      warningLabel.textContent = 'Aviso';
+      const status = document.createElement('strong');
       status.className = 'record-warning-status';
       status.dataset.warned = String(record.warned);
       status.textContent = record.warned ? 'Grupo avisado' : 'Por avisar';
-      details.append(buggy, status, ` · Registado às ${observationTime.format(new Date(record.recorded_at))}`);
-      card.append(heading, delay, details);
+      warning.append(warningLabel, status);
+      card.append(summary, details, warning);
+
       if (record.notes) {
-        const notes = document.createElement('p');
+        const notes = document.createElement('div');
         notes.className = 'record-notes';
-        notes.textContent = record.notes;
+        const notesLabel = document.createElement('span');
+        notesLabel.className = 'record-label';
+        notesLabel.textContent = 'Notas';
+        const notesText = document.createElement('p');
+        notesText.textContent = record.notes;
+        notes.append(notesLabel, notesText);
         card.append(notes);
       }
+
       const edit = document.createElement('button');
       edit.type = 'button';
       edit.textContent = 'Editar aviso e notas';
       edit.addEventListener('click', () => openRecordForm(record, true));
       const remove = document.createElement('button');
       remove.type = 'button';
+      remove.className = 'record-delete';
       remove.textContent = 'Apagar';
       remove.setAttribute('aria-label', `Apagar registo de ${describeRecord(record)}`);
       remove.addEventListener('click', () => deleteRecord(record, remove));
