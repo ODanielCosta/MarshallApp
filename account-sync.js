@@ -1,6 +1,6 @@
 // MarshallApp: account and shared pace records.
 (() => {
-  const URL = 'https://czpttuvcppxdfbrdpwyh.supabase.co';
+  const SUPABASE_URL = 'https://czpttuvcppxdfbrdpwyh.supabase.co';
   const KEY = 'sb_publishable_e1Zz8LKxo5A_OW-lHYq7vA_B5h8-Owu';
   const script = document.createElement('script');
   script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.95.3/dist/umd/supabase.min.js';
@@ -239,7 +239,7 @@
   }
 
   function initialize() {
-    client = window.supabase.createClient(URL, KEY);
+    client = window.supabase.createClient(SUPABASE_URL, KEY);
     client.auth.onAuthStateChange((_event, session) => { setTimeout(() => setUser(session?.user ?? null), 0); });
   }
 
