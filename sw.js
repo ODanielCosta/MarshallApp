@@ -1,10 +1,10 @@
 'use strict';
 
 // Change this revision when changing any app-shell file so existing installs update.
-const CACHE_NAME = 'marshall-shell-v5';
+const CACHE_NAME = 'marshall-shell-v12';
 const CACHE_PREFIX = 'marshall-shell-';
 const SHELL_PATHS = [
-    './', './index.html', './pwa.js', './pwa.css', './manifest.webmanifest',
+    './', './index.html', './pwa.js', './pwa.css', './account-sync.js', './manifest.webmanifest',
     './ROYAL_OBIDOS_Logo.png', './course.jpg', './favicon.png',
     './icons/icon-192.png', './icons/icon-512.png',
     './icons/icon-maskable-512.png', './icons/apple-touch-icon.png'
