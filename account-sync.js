@@ -84,6 +84,9 @@
   }
 
   function renderRecords(records) {
+    const version = records.map(({ id, revision }) => `${id}:${revision}`).join(',');
+    if (recordsList.dataset.version === version) return;
+    recordsList.dataset.version = version;
     recordsList.replaceChildren();
     for (const record of records) {
       const card = document.createElement('li');
@@ -106,8 +109,39 @@
       edit.type = 'button';
       edit.textContent = 'Editar aviso e notas';
       edit.addEventListener('click', () => openRecordForm(record, true));
-      card.append(edit);
+      const remove = document.createElement('button');
+      remove.type = 'button';
+      remove.textContent = 'Apagar';
+      remove.setAttribute('aria-label', `Apagar registo de ${describeRecord(record)}`);
+      remove.addEventListener('click', () => deleteRecord(record, remove));
+      const actions = document.createElement('div');
+      actions.className = 'record-actions';
+      actions.append(edit, remove);
+      card.append(actions);
       recordsList.append(card);
+    }
+  }
+
+  async function deleteRecord(record, button) {
+    const owner = currentUser?.id;
+    if (!owner || !window.confirm(`Apagar o registo de ${describeRecord(record)} para todos os que usam esta conta?`)) return;
+    button.disabled = true;
+    try {
+      const { data, error } = await client.from('marshall_records').delete()
+        .eq('id', record.id).eq('user_id', owner).eq('revision', record.revision)
+        .select('id').maybeSingle();
+      if (error) throw error;
+      if (currentUser?.id !== owner || !recordsDialog.open) return;
+      await loadRecords();
+      if (!data && currentUser?.id === owner && recordsDialog.open) {
+        $('records-status').textContent = 'O registo foi alterado ou já foi apagado. Verifica a lista atualizada.';
+      }
+    } catch {
+      if (currentUser?.id === owner && recordsDialog.open) {
+        $('records-status').textContent = 'Não foi possível apagar o registo. Tenta de novo.';
+      }
+    } finally {
+      button.disabled = false;
     }
   }
 
@@ -116,7 +150,7 @@
     const request = ++listRequest;
     const day = getCourseClock().day;
     if (listDay !== day) {
-      recordsList.replaceChildren();
+      renderRecords([]);
       $('records-status').textContent = 'A carregar os registos de hoje…';
       listDay = day;
     }
@@ -217,7 +251,7 @@
     currentUser = user;
     listRequest++;
     listDay = undefined;
-    recordsList.replaceChildren();
+    renderRecords([]);
     recordsDialog.close();
     recordDialog.close();
     draft = undefined;
@@ -233,9 +267,11 @@
     }
     $('account-password').value = '';
     showStatus('Ligado: ' + user.email);
-    recordsChannel = client.channel('marshall-records-' + user.id).on('postgres_changes', {
-      event: '*', schema: 'public', table: 'marshall_records', filter: 'user_id=eq.' + user.id
-    }, loadRecords).subscribe(status => { if (status === 'SUBSCRIBED') loadRecords(); });
+    const recordFilter = { schema: 'public', table: 'marshall_records', filter: 'user_id=eq.' + user.id };
+    recordsChannel = client.channel('marshall-records-' + user.id)
+      .on('postgres_changes', { ...recordFilter, event: 'INSERT' }, loadRecords)
+      .on('postgres_changes', { ...recordFilter, event: 'UPDATE' }, loadRecords)
+      .subscribe(status => { if (status === 'SUBSCRIBED') loadRecords(); });
   }
 
   function initialize() {
@@ -303,6 +339,7 @@
   });
   document.addEventListener('visibilitychange', () => { if (!document.hidden) loadRecords(); });
   setInterval(() => {
-    if (!document.hidden && recordsDialog.open && listDay !== getCourseClock().day) loadRecords();
+    // Filtered Realtime subscriptions do not receive deletes.
+    if (!document.hidden && recordsDialog.open) loadRecords();
   }, 30000);
 })();
